@@ -4,23 +4,51 @@ const notes = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
 const intervals = ["R", "m2", "2", "m3", "3", "4", "d5", "5", "m6", "6", "m7", "7"]
 const intervals_ = ["R", "m2", "M2", "m3", "M3", "P4", "d5", "P5", "m6", "M6", "m7", "M7"]
 
+/**
+ * Returns the absolute index of a note (A=0)
+ * @param {String} note 
+ * @returns 
+ */
 function indexOfNote(note) {
 	for (let [i, n] of notes.entries()) {
 		if (n == note) return i
 	}
 }
+
+/**
+ * Returns the index of a note in a scale
+ * @example
+ * e.g. `indexOfNoteInScale("D", constructScale("C", "major"))` --> `2`
+ * @param {String} note 
+ * @param {Array<String>} scale 
+ * @returns Number
+ */
 function indexOfNoteInScale(note, scale) {
 	for (let i=0; i<scale.length; i++) {
 		if (note == scale[i]) return i
 	}
 	return null
 }
+
+/**
+ * Returns if or if not a note is in a scale
+ * @param {String} note 
+ * @param {Array<String>} scale 
+ * @returns 
+ */
 function noteInScale(note, scale) {
 	for (let [i, n] of scale.entries()) {
 		if (n == note) return true
 	}
 	return false
 }
+/**
+ * Constructs a scale
+ * @example `constructScale("C", "major")`
+ * @param {String} note 
+ * @param {String} scale 
+ * @returns {Array<String>} scale notes
+ */
 function constructScale(note, scale) {
 	let ints = []
 	let constructed = [note]
@@ -37,7 +65,13 @@ function constructScale(note, scale) {
 	return constructed
 }
 
+/**
+ * Build the fretboard.
+ * @param {Number} numFrets 
+ * @returns {Array<Array<String>>} 2d array with note name
+ */
 function buildFretboard(numFrets=12) {
+    // TODO: add more docs
 	let fretboard = []
 	for (let i=0; i<numFrets; i++) {
 		let column = []
