@@ -10,9 +10,8 @@ const intervals_ = ["R", "m2", "M2", "m3", "M3", "P4", "d5", "P5", "m6", "M6", "
  * @returns 
  */
 function indexOfNote(note) {
-	for (let [i, n] of notes.entries()) {
-		if (n == note) return i
-	}
+	if (note)
+	return notes.indexOf(note)
 }
 
 /**
