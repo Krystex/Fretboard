@@ -1,8 +1,74 @@
 
 const tuning = ["E", "A", "D", "G", "B", "E"]
+const basenotes = ["A", "B", "C", "D", "E", "F", "G"]
+const basenoteidx = [0, 2, 3, 5, 7, 8, 10, 12]
 const notes = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
 const intervals = ["R", "m2", "2", "m3", "3", "4", "d5", "5", "m6", "6", "m7", "7"]
 const intervals_ = ["R", "m2", "M2", "m3", "M3", "P4", "d5", "P5", "m6", "M6", "m7", "M7"]
+
+class Note {
+	constructor(note) {
+		this.note = note
+	}
+	/**
+	 * Returns distance between two notes in semitones
+	 * @param {string} a note
+	 * @param {string} b note
+	 */
+	static dist(a, b) {
+		return (Note.indexOfNote(b) - Note.indexOfNote(a) + 12) % 12
+	}
+	/**
+	 * Returns index of note, relative to A. Used for calculating distance between notes.
+	 * e.g. A -> 0, Ab -> -1, B -> 2, C -> 3
+	 * @param {string} note 
+	 */
+	static indexOfNote(note) {
+		let offset = 0
+		if (note.substring(1, 2) == "b") {offset = -1}  // if flat, decrement index
+		else if (note.substring(1, 2) == "#") {offset = 1}  // if sharp, increment index
+		const idx = basenotes.indexOf(Note.baseNote(note))  // get index of base note
+		return basenoteidx[idx] + offset  // calculate note distance from A to note by getting base note idx (distance in half-steps to a)
+	}
+	/**
+	 * Removes flat or sharp from note.
+	 * e.g. C# -> C, Db -> D
+	 * @param {string} note 
+	 * @returns {string} note
+	 */
+	static baseNote(note) {
+		return note.substring(0, 1)
+	}
+	static nextBaseNote(note) {
+		const currentBaseNoteIdx = basenotes.indexOf(Note.baseNote(note))
+		return basenotes[(currentBaseNoteIdx+1) % 7]
+	}
+}
+
+/**
+ * Builds a hexatonic scale. Only supports scale with whole- and halfsteps
+ * @param {*} key note of key (e.g. "C" or "Ab")
+ * @param {*} scale scale name (e.g. "major")
+ * @returns {Array<string>}
+ */
+function buildScale(key, scale) {
+	let constructed = [key]  // scale starts with key note
+	let ints = undefined
+	if (scale == "major") ints = [2, 2, 1, 2, 2, 2, 1]
+	for (const interval of ints) {
+		// we get next note and then sharp or flat notes. this ensures every note only appears once in the scale
+		const lastNote = constructed[constructed.length-1]  // get last constructed note
+		let nextNote = Note.nextBaseNote(lastNote)  // calculate next base note (A -> B, B -> C)
+		const noteDistance = Note.dist(lastNote, nextNote)  // calculate note distance between both. 
+		if (noteDistance < interval) {  // now flat or sharp note, depending how many semi-tones are between both notes
+			nextNote += "#"
+		} else if (noteDistance > interval) {
+			nextNote += "b"
+		}
+		constructed.push(nextNote)  // add to constructed scale
+	}
+	return constructed
+}
 
 /**
  * Returns the absolute index of a note (A=0)
