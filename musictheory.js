@@ -51,8 +51,10 @@ class Scale {
 	 */
 	constructor(key, scale) {
 		let constructed = [key]  // scale starts with key note
-		let ints = undefined
+		let ints = undefined // intervals
 		if (scale == "major") ints = [2, 2, 1, 2, 2, 2, 1]
+		else if (scale == "minor" || scale == "natural minor") ints = [2, 1, 2, 2, 1, 2, 2]
+		else { console.error(`"Scale ${scale} not yet implemented`); return }
 		for (const interval of ints) {
 			// we get next note and then sharp or flat the note. this ensures that every note only appears once in the scale
 			const lastNote = constructed[constructed.length-1]  // get last constructed note
@@ -65,10 +67,7 @@ class Scale {
 			}
 			constructed.push(nextNote)  // add to constructed scale
 		}
-		this.scale = constructed
-	}
-	notes() {
-		return this.scale
+		this.notes = constructed
 	}
 }
 
