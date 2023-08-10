@@ -42,11 +42,15 @@ class Note {
 	}
 }
 
+/**
+ * Holds a musical scale.
+ * The notes of the scale can be accessed by `new Scale("C", "major").notes`
+ */
 class Scale {
 	/**
 	 * Builds a hexatonic scale. Only supports scale with whole- and halfsteps
-	 * @param {*} key note of key (e.g. "C" or "Ab")
-	 * @param {*} scale scale name (e.g. "major")
+	 * @param {String} key note of key (e.g. "C" or "Ab")
+	 * @param {String} scale scale name (e.g. "major")
 	 * @returns {Array<string>}
 	 */
 	constructor(key, scale) {
@@ -54,7 +58,7 @@ class Scale {
 		let ints = undefined // intervals
 		if (scale == "major") ints = [2, 2, 1, 2, 2, 2, 1]
 		else if (scale == "minor" || scale == "natural minor") ints = [2, 1, 2, 2, 1, 2, 2]
-		else { console.error(`"Scale ${scale} not yet implemented`); return }
+		else { console.error(`Scale ${scale} not yet implemented`); return }
 		for (const interval of ints) {
 			// we get next note and then sharp or flat the note. this ensures that every note only appears once in the scale
 			const lastNote = constructed[constructed.length-1]  // get last constructed note
@@ -77,7 +81,6 @@ class Scale {
  * @returns 
  */
 function indexOfNote(note) {
-	if (note)
 	return notes.indexOf(note)
 }
 
