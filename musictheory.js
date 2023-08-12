@@ -21,7 +21,8 @@ class Note {
 	 * @param {string} note 
 	 */
 	static indexOfNote(note) {
-		let offset = 0
+		let offset
+		if (note.length == 1) { offset = 0 }  // if not sharp or flat
 		if (note.substring(1, 2) == "b") {offset = -1}  // if flat, decrement index
 		else if (note.substring(1, 2) == "#") {offset = 1}  // if sharp, increment index
 		const idx = basenotes.indexOf(Note.baseNote(note))  // get index of base note
@@ -40,6 +41,23 @@ class Note {
 		const currentBaseNoteIdx = basenotes.indexOf(Note.baseNote(note))
 		return basenotes[(currentBaseNoteIdx+1) % 7]
 	}
+	/**
+	 * Add interval to note.
+	 * e.g. "C" + "3"
+	 * @param {String} note note
+	 * @param {String} int interval
+	 * @returns {String} note
+	 */
+	static addInt(note, int) {
+		if (!intervals.includes(int)) {
+			throw `Doesn't support interval ${int}. Possible values: ${intervals}`
+		}
+		let hs = intervals.indexOf(int)  // half steps of interval
+		let newnoteidx = Note.indexOfNote(note) + hs  // add half steps to interval
+		console.log("Halfsteps:", hs, "newnoteidx", newnoteidx)
+		// TODO: make compatible with enharmonic equivalents
+		return notes[(newnoteidx + 12) % 12]
+	}
 }
 
 /**
@@ -55,9 +73,9 @@ class Scale {
 	 */
 	constructor(key, scale) {
 		let constructed = [key]  // scale starts with key note
-		let ints = undefined // intervals
-		if (scale == "major") ints = [2, 2, 1, 2, 2, 2, 1]
-		else if (scale == "minor" || scale == "natural minor") ints = [2, 1, 2, 2, 1, 2, 2]
+		let ints = undefined  // intervals
+		if (scale == "major") { ints = [2, 2, 1, 2, 2, 2, 1] }
+		else if (scale == "minor" || scale == "natural minor") { ints = [2, 1, 2, 2, 1, 2, 2] }
 		else { console.error(`Scale ${scale} not yet implemented`); return }
 		for (const interval of ints) {
 			// we get next note and then sharp or flat the note. this ensures that every note only appears once in the scale
