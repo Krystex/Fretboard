@@ -73,6 +73,10 @@ class Scale {
 		}
 		this.notes = constructed
 	}
+	/**
+	 * Circle of fifths with enharmonic equivalents
+	 */
+	static CircleOfFifths = [["C"], ["G"], ["D"], ["A"], ["E"], ["B", "Cb"], ["F#", "Gb"], ["C#", "Db"], ["Ab"], ["Eb"], ["Bb"], ["F"]]
 }
 
 /**
