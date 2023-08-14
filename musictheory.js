@@ -54,7 +54,6 @@ class Note {
 		}
 		let hs = intervals.indexOf(int)  // half steps of interval
 		let newnoteidx = Note.indexOfNote(note) + hs  // add half steps to interval
-		console.log("Halfsteps:", hs, "newnoteidx", newnoteidx)
 		// TODO: make compatible with enharmonic equivalents
 		return notes[(newnoteidx + 12) % 12]
 	}
@@ -72,6 +71,8 @@ class Scale {
 	 * @returns {Array<string>}
 	 */
 	constructor(key, scale) {
+		this.key = key
+		this.scale = scale
 		let constructed = [key]  // scale starts with key note
 		let ints = undefined  // intervals
 		if (scale == "major") { ints = [2, 2, 1, 2, 2, 2, 1] }
