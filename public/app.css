@@ -1,0 +1,11 @@
+body {
+    background-color: rgb(29, 30, 32);
+    color: white;
+}
+.container {
+    display: flex;
+    justify-content: center;
+}
+text {
+    cursor: default;
+}

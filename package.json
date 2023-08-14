@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "esbuild": "0.19.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "scripts": {
+    "build": "esbuild src/app.jsx --bundle --minify --sourcemap --outfile=public/assets/app.js",
+    "serve": "esbuild src/app.jsx --bundle --outdir=public/assets/ --watch --servedir=public"
+  }
+}
