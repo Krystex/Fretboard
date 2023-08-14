@@ -5,7 +5,7 @@
     "react-dom": "^18.2.0"
   },
   "scripts": {
-    "build": "esbuild src/app.jsx --bundle --minify --sourcemap --outfile=public/assets/app.js",
-    "serve": "esbuild src/app.jsx --bundle --outdir=public/assets/ --watch --servedir=public"
+    "build": "esbuild src/app.jsx src/styles/app.css --bundle --outdir=public/assets/ --minify --sourcemap",
+    "serve": "esbuild src/app.jsx src/styles/app.css --bundle --outdir=public/assets/ --sourcemap --watch --servedir=public"
   }
 }
