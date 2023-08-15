@@ -1,6 +1,11 @@
 import React, { useCallback, useState } from "react"
 import { range, scaleLinear } from "./helper"
 
+/**
+ * Simple SVG Line component
+ * @param {{fromx, fromy, tox, toy}} props 
+ * @returns 
+ */
 const Line = (props) => {
     const { fromx, fromy, tox, toy } = props
     return <path d={`M ${fromx} ${fromy} L ${tox} ${toy}`} {...props}></path>
@@ -23,7 +28,11 @@ const Fretboard = ({width, frets=12, strings=6}) => {
             { /* Vertical Lines */}
             { range(0, frets).map(i => (
                 <Line key={i} fromx={scx(i)} fromy={scy(0)} tox={scx(i)} toy={scy(strings-1)} stroke="#aaa" strokeWidth="1.5" />
-            )) }
+            ))}
+            { /* Fretboard navigation dots */}
+            { [3, 5, 7, 9].map(i => (
+                <circle key={i} cx={scx(i-0.5)} cy={scy(strings/2-0.5)} r="8" fill="#444"></circle>
+            ))}
         </>
     )
 }
