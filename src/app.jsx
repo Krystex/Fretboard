@@ -6,18 +6,11 @@ import { Fretboard } from "./Fretboard.jsx"
 new EventSource('/esbuild').addEventListener('change', () => location.reload())
 
 const App = (props) => {
-
-    const [count, setCount] = useState(0);
-    const increment = useCallback(() => {
-        setCount(count => count + 1)
-    }, [count])
-
     return (
         <>
-            <h1>{props.message}</h1>
-            <h2>Count: {count}</h2>
-            <Fretboard />
-            <button onClick={increment}>Increment</button>
+            <svg width="800" height="600">
+                <Fretboard width={800} />
+            </svg>
         </>
     )
 }
