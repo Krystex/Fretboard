@@ -157,6 +157,44 @@ function constructScale(note, scale) {
 	return constructed
 }
 
+class FretboardCtrl {
+	/**
+	 * 
+	 * @param {Number} numFrets number of frets (e.g. 12 for guitar)
+	 * @param {Array<String>} tuning tuning (e.g. `["E", "A", "D", "G", "B", "E"]` for guitar)
+	 */
+	constructor(numFrets, tuning) {
+		this.board = []
+		this.numFrets = numFrets
+		this.numStrings = tuning.length
+		this.tuning = tuning
+
+		for (let i=0; i<this.numFrets; i++) {
+			let column = []
+			for (let j=this.numStrings; j>0; j--) {
+				const note = notes[(indexOfNote(tuning[j-1]) + i) % 12]
+				column.push(note)
+			}
+			this.board.push(column)
+		}
+	}
+	/**
+	 * Map fretboard notes. 
+	 * e.g. `board.map((x, y, note) => console.log(note))` returns all notes
+	 * @param {(x: Number, y: Number, note: String) => ()} callback callback with fretboard position `x`, `y` and note name `note`
+	 * @returns {Array}
+	 */
+	map(callback) {
+		let results = []
+		for (let x=0; x<this.numFrets; x++) {
+			for (let y=0; y<this.numStrings; y++) {
+				results.push(callback(x, y, this.board[x][y]))
+			}
+		}
+		return results
+	}
+}
+
 /**
  * Build the fretboard.
  * @param {Number} numFrets 
@@ -175,3 +213,5 @@ function buildFretboard(numFrets=12) {
 	}
 	return fretboard
 }
+
+export { Note, Scale, FretboardCtrl }
