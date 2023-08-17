@@ -3,12 +3,29 @@ import { range, scaleLinear } from "./helper"
 
 /**
  * Simple SVG Line component
- * @param {{fromx, fromy, tox, toy}} props 
+ * @param {{fromx: Number, fromy: Number, tox: Number, toy: Number}} props 
  * @returns 
  */
 const Line = (props) => {
     const { fromx, fromy, tox, toy } = props
     return <path d={`M ${fromx} ${fromy} L ${tox} ${toy}`} {...props}></path>
+}
+
+
+const Arc = (props) => {
+    const { x, y, innerRadius, outerRadius, startAngle, endAngle } = props
+    const deg2rad = deg => (2*Math.PI/360)*deg
+    const circle = (radius, angle) => [(radius * Math.cos(deg2rad(angle))).toFixed(3), (radius * Math.sin(deg2rad(angle))).toFixed(3)]
+    
+    const [innerStartX, innerStartY] = circle(innerRadius, startAngle)
+    const [innerStopX, innerStopY] = circle(innerRadius, endAngle)
+    const [outerStartX, outerStartY] = circle(outerRadius, startAngle)
+    const [outerStopX, outerStopY] = circle(outerRadius, endAngle)
+    
+    // d3.arc().innerRadius(50).outerRadius(70).startAngle(0).endAngle(Math.PI/2)()
+    // return <path d="M0,-70A70,70,0,0,1,70,0L50,0A50,50,0,0,0,0,-50Z" transform="translate(70,70)"></path>
+    // arc syntax: A radius x-axis, radius y-axis, rotation x-axis, large arc flag, sweep flag, xy coords endpoint
+    return <path d={`M ${-outerStopX} ${-outerStopY} A ${outerRadius} ${outerRadius} 0 0 1 ${outerStartX} ${outerStartY} L ${innerStartX} ${innerStartY} A ${innerRadius} ${innerRadius} 0 0 0 ${-innerStopX} ${-innerStopY}Z`} fill="white" transform={`translate(${x},${y})`}></path>
 }
 
 const Fretboard = ({width, board, frets=12, strings=6}) => {
@@ -45,6 +62,7 @@ const Fretboard = ({width, board, frets=12, strings=6}) => {
                     textAnchor="middle"
                     pointerEvents="none">{note}</text>
             ))}
+            <Arc x={70} y={70} innerRadius={50} outerRadius={70} startAngle={0} endAngle={90} />
         </>
     )
 }
