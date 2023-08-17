@@ -11,9 +11,19 @@ const Line = (props) => {
     return <path d={`M ${fromx} ${fromy} L ${tox} ${toy}`} {...props}></path>
 }
 
-
+/**
+ * Arc SVG component, similar to `d3.arc()`
+ * @param {object} props 
+ * @param {Number} props.x x position of circle
+ * @param {Number} props.y y position of circle
+ * @param {Number} props.innerRadius inner radius of circle
+ * @param {Number} props.outerRaidus outer radius of circle
+ * @param {Number} props.startAngle starting angle of arc (in degrees)
+ * @param {Number} props.endAngle ending angle or arc (in degrees)
+ * @returns 
+ */
 const Arc = (props) => {
-    const { x, y, innerRadius, outerRadius, startAngle, endAngle } = props
+    const { x, y, innerRadius, outerRadius, startAngle, endAngle, ...rest } = props
     const deg2rad = deg => (2*Math.PI/360)*deg
     const circle = (radius, angle) => [(radius * Math.cos(deg2rad(angle))).toFixed(3), (radius * Math.sin(deg2rad(angle))).toFixed(3)]
     
@@ -27,7 +37,7 @@ const Arc = (props) => {
     
     return (
         <>
-            <path d={`M ${outerStartX} ${outerStartY} A ${outerRadius} ${outerRadius} 0 ${sweepflag} 1 ${outerStopX} ${outerStopY} L ${innerStopX} ${innerStopY} A ${innerRadius} ${innerRadius} 0 ${sweepflag} 0 ${innerStartX} ${innerStartY}Z`} transform={`translate(${x},${y})`} fill="white"></path>
+            <path d={`M ${outerStartX} ${outerStartY} A ${outerRadius} ${outerRadius} 0 ${sweepflag} 1 ${outerStopX} ${outerStopY} L ${innerStopX} ${innerStopY} A ${innerRadius} ${innerRadius} 0 ${sweepflag} 0 ${innerStartX} ${innerStartY}Z`} transform={`translate(${x},${y})`} {...rest}></path>
         </>
     )
 }
