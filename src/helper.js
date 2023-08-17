@@ -1,6 +1,7 @@
 
 /**
  * Linear Scale function similar to D3.js
+ * TODO: write docs, add example
  *  */
 const scaleLinear = (domain, range) => (val) => {
     const scaled = (val - range[0]) / (range[1] - range[0]) // value between 0 and 1
