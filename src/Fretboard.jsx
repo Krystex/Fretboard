@@ -50,6 +50,18 @@ const Arc = ({ x, y, innerRadius, outerRadius, startAngle, endAngle, padAngle=0,
 }
 
 /**
+ * Arcs arranged in a circle, similar to a pie-plot
+ */
+const CircleOfArcs = ({num, ...rest}) => {
+    const angle = 360. / num
+    return (
+        <>{range(0, 360, angle).map(i => (
+            <Arc key={i} {...rest} startAngle={i} endAngle={i+angle} text={i} />
+        ))}</>
+    )
+}
+
+/**
  * 
  * @param {object} props 
  * @param {Number} props.width width of svg context
@@ -94,7 +106,9 @@ const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
                     textAnchor="middle"
                     pointerEvents="none">{note}</text>
             ))}
-            {/* <Arc x={70} y={70} innerRadius={50} outerRadius={70} startAngle={0} endAngle={350} fill="white" /> */}
+            {/* <Arc x={120} y={270} innerRadius={30} outerRadius={70} startAngle={0} endAngle={90} padAngle={3} fill="white" />
+            <Arc x={120} y={270} innerRadius={30} outerRadius={70} startAngle={90} endAngle={180} padAngle={3} fill="white" /> */}
+            <CircleOfArcs num={12} x={120} y={270} innerRadius={30} outerRadius={70} padAngle={2} fill="white" />
         </>
     )
 }

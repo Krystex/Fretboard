@@ -14,9 +14,9 @@ const scaleLinear = (domain, range) => (val) => {
  * @param {Number} max 
  * @returns {Array<Number>}
  */
-const range = (min, max) => {
+const range = (min, max, stepsize=1) => {
     let items = []
-    for (let i=min; i<max; i++) {
+    for (let i=min; i<max; i+=stepsize) {
         items.push(i)
     }
     return items
