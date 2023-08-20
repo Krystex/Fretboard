@@ -25,15 +25,19 @@ const Line = (props) => {
  * @example
  * <Arc x={70} y={70} innerRadius={50} outerRadius={70} startAngle={0} endAngle={350} fill="white" />
  */
-const Arc = (props) => {
-    const { x, y, innerRadius, outerRadius, startAngle, endAngle, ...rest } = props
+const Arc = ({ x, y, innerRadius, outerRadius, startAngle, endAngle, padAngle=0, ...rest }) => {
     const deg2rad = deg => (2*Math.PI/360)*deg
+    const rad2deg = rad => rad * 180 / Math.PI
     const circle = (radius, angle) => [(radius * Math.cos(deg2rad(angle))).toFixed(3), (radius * Math.sin(deg2rad(angle))).toFixed(3)]
     
+    const anglePadding = deg2rad(padAngle) / 2  // i don't really know what i'm doing with the padding angle. its all taken from d3's arc function
+    const radiusPadding = Math.sqrt(innerRadius*innerRadius + outerRadius*outerRadius) // geometric mean of inner and outer radius
+    const innerPadding = Math.asin(radiusPadding / innerRadius * Math.sin(anglePadding))
+    const outerPadding = Math.asin(radiusPadding / outerRadius * Math.sin(anglePadding))
     const [innerStartX, innerStartY] = circle(innerRadius, startAngle-90)
-    const [innerStopX, innerStopY] = circle(innerRadius, endAngle-90)
+    const [innerStopX, innerStopY] = circle(innerRadius, endAngle-90-rad2deg(innerPadding))
     const [outerStartX, outerStartY] = circle(outerRadius, startAngle-90)
-    const [outerStopX, outerStopY] = circle(outerRadius, endAngle-90)
+    const [outerStopX, outerStopY] = circle(outerRadius, endAngle-90-rad2deg(outerPadding))
 
     const over180degrees = (endAngle - startAngle) > 180
     const sweepflag = over180degrees ? "1" : "0"
