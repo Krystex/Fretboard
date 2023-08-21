@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react"
 import { range, scaleLinear } from "./helper"
-import { FretboardCtrl } from "./musictheory"
+import { FretboardCtrl, Scale } from "./musictheory"
 
 /**
  * Simple SVG Line component
@@ -43,9 +43,7 @@ const Arc = ({ x, y, innerRadius, outerRadius, startAngle, endAngle, padAngle=0,
     const sweepflag = over180degrees ? "1" : "0"
     
     return (
-        <>
-            <path d={`M ${outerStartX} ${outerStartY} A ${outerRadius} ${outerRadius} 0 ${sweepflag} 1 ${outerStopX} ${outerStopY} L ${innerStopX} ${innerStopY} A ${innerRadius} ${innerRadius} 0 ${sweepflag} 0 ${innerStartX} ${innerStartY}Z`} transform={`translate(${x},${y})`} {...rest}></path>
-        </>
+        <path d={`M ${outerStartX} ${outerStartY} A ${outerRadius} ${outerRadius} 0 ${sweepflag} 1 ${outerStopX} ${outerStopY} L ${innerStopX} ${innerStopY} A ${innerRadius} ${innerRadius} 0 ${sweepflag} 0 ${innerStartX} ${innerStartY}Z`} transform={`translate(${x},${y})`} {...rest}></path>
     )
 }
 
@@ -106,9 +104,10 @@ const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
                     textAnchor="middle"
                     pointerEvents="none">{note}</text>
             ))}
-            {/* <Arc x={120} y={270} innerRadius={30} outerRadius={70} startAngle={0} endAngle={90} padAngle={3} fill="white" />
-            <Arc x={120} y={270} innerRadius={30} outerRadius={70} startAngle={90} endAngle={180} padAngle={3} fill="white" /> */}
-            <CircleOfArcs num={12} x={120} y={270} innerRadius={30} outerRadius={70} padAngle={2} fill="white" />
+            { /* Circle of fifths circle */}
+            { Scale.CircleOfFifths.map((notes, i) => (
+                <Arc key={i} x={350} y={300} innerRadius={30} outerRadius={100} startAngle={i*30-14} endAngle={(i+1)*30-14} padAngle={3} fill="white" />
+            ))}
         </>
     )
 }
