@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react"
 import { range, pointOnCircle, scaleLinear } from "./helper"
-import { FretboardCtrl, Scale } from "./musictheory"
+import { FretboardCtrl, Scale, Note } from "./musictheory"
 
 /**
  * Simple SVG Line component
@@ -18,7 +18,7 @@ const Line = (props) => {
  * @param {Number} props.x x position of circle
  * @param {Number} props.y y position of circle
  * @param {Number} props.innerRadius inner radius of circle
- * @param {Number} props.outerRaidus outer radius of circle
+ * @param {Number} props.outerRadius outer radius of circle
  * @param {Number} props.startAngle starting angle of arc (in degrees)
  * @param {Number} props.endAngle ending angle or arc (in degrees)
  * @returns
@@ -60,7 +60,7 @@ const CircleOfArcs = ({num, ...rest}) => {
 }
 
 /**
- * 
+ * Text component for embedding in svg
  * @param {object} props
  * @param {Number} props.x x position
  * @param {Number} props.y y position
@@ -75,6 +75,17 @@ const Text = ({x, y, children, ...rest}) => (
         pointerEvents="none" {...rest}>{children}</text>
 )
 
+/**
+ * Circle of fifths component in svg
+ * @param {object} props props
+ * @param {Number} props.x x position
+ * @param {Number} props.y y position
+ * @param {String} props.highlightNote note which should be highlighted on circle
+ * @param {Number} props.innerRadius inner radius of circle
+ * @param {Number} props.outerRadius outer radius of circle
+ * @param {(String) => boolean} props.onNoteEnter function gets triggered if note is hovered
+ * @param {(String) => boolean} props.onNoteOut function gets triggered if note is not hovered anymore
+ */
 const CircleOfFifths = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEnter=null, onNoteOut=null}) => {
     const angle = 360. / 12
     const halfAngle = angle / 2 - 1  // used for shifting arcs so they are centered. minus one just because it looks a little nicer
@@ -127,7 +138,9 @@ const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
     const scy = scaleLinear([20, 200], [0, board.numStrings])
     // active note in circle of fifths
     const [cofNotes, setCofNotes] = useState(null)
-    // Color function. 
+    // display function. calculates if note should be shown or not
+    const display = (note) => cofNotes && Note.eq(note, cofNotes[0])
+    // color function. calculates the color according to the circle of fifths
     const indexInCof = (note) => Scale.Colormap[Scale.indexOfCircleOfFifths(note)]
 
     return (
@@ -147,13 +160,14 @@ const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
             { /* Fretboard note circles */ }
             { board.map((x, y, note) => (
                 <circle key={`${x}-${y}`} cx={scx(x-0.5)} cy={scy(y)} r="12" stroke="#000"
-                    fill={indexInCof(note)}
+                    fill={indexInCof(note)} opacity={display(note) ? 1 : 0}
                     onMouseEnter={() => onMouseEnter && onMouseEnter(x, y, note)}
                     onMouseOut={() => onMouseOut && onMouseOut(x, y, note)}></circle>
             ))}
             { /* Fretboard note circles texts */ }
             { board.map((x, y, note) => (
                 <text x={scx(x-0.5)} y={scy(y)} key={`${x}-${y}`} fill="#000" fontSize="14"
+                    opacity={display(note) ? 1 : 0}
                     fontFamily="-apple-system, BlinkMacSystemFont, Roboto, sans-serif"
                     alignmentBaseline="central"
                     textAnchor="middle"
