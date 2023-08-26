@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react"
-import { range, scaleLinear } from "./helper"
+import { range, pointOnCircle, scaleLinear } from "./helper"
 import { FretboardCtrl, Scale } from "./musictheory"
 
 /**
@@ -91,7 +91,7 @@ const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
             ))}
             { /* Vertical Lines */ }
             { range(0, board.numFrets).map(i => (
-                <Line key={i} fromx={scx(i)} fromy={scy(0)} tox={scx(i)} toy={scy(board.numStrings-1)} stroke="#aaa" strokeWidth="1.5" />
+                <Line key={i} fromx={scx(i)} fromy={scy(0)} tox={scx(i)} toy={scy(board.numStrings-1)} stroke="#aaa" strokeWidth={i == 0 || i == 11 ? 3 : 1.5} strokeLinecap="round" />
             ))}
             { /* Fretboard navigation dots */ }
             { [3, 5, 7, 9].map(i => (
@@ -113,8 +113,22 @@ const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
             ))}
             { /* Circle of fifths circle */}
             { Scale.CircleOfFifths.map((notes, i) => (
-                <Arc key={i} x={350} y={300} innerRadius={30} outerRadius={100} startAngle={i*30-14} endAngle={(i+1)*30-14} padAngle={3} fill="white" />
+                <Arc key={i} x={350} y={300} innerRadius={30} outerRadius={100} startAngle={i*30-14} endAngle={(i+1)*30-14} padAngle={2} text={notes[0]} fill="white" />
             ))}
+            { /* Circle of fifths texts */ }
+            { Scale.CircleOfFifths.map((notes, i) => {
+                const startAngle = i*30-14, endAngle = (i+1)*30-14
+                const radiusOffset = notes.length == 2 ? 0.18*(100 - 30) : 0
+                const [textPosX, textPosY] = pointOnCircle(30+(100 - 30)/2+radiusOffset, startAngle + (endAngle - startAngle)/2 - 90, offset=[350, 300])
+                const [textPosX2, textPosY2] = pointOnCircle(30+(100 - 30)/2-radiusOffset, startAngle + (endAngle - startAngle)/2 - 90, offset=[350, 300])
+
+                return (
+                    <g key={i}>
+                        <Text x={textPosX} y={textPosY}>{notes[0]}</Text>
+                        { notes.length == 2 ? <Text x={textPosX2} y={textPosY2}>{notes[1]}</Text> : "" }
+                    </g>
+                )
+            })}
         </>
     )
 }

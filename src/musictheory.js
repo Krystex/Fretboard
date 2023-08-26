@@ -95,7 +95,7 @@ class Scale {
 	/**
 	 * Circle of fifths with enharmonic equivalents
 	 */
-	static CircleOfFifths = [["C"], ["G"], ["D"], ["A"], ["E"], ["B", "Cb"], ["F#", "Gb"], ["C#", "Db"], ["Ab"], ["Eb"], ["Bb"], ["F"]]
+	static CircleOfFifths = [["C"], ["G"], ["D"], ["A"], ["E"], ["Cb", "B"], ["Gb", "F#"], ["Db", "C#"], ["Ab"], ["Eb"], ["Bb"], ["F"]]
 }
 
 /**
