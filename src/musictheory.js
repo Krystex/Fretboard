@@ -35,6 +35,7 @@ class Note {
 	 * @example Note.eq("Ab", "G#") == true
 	 */
 	static eq(a, b) {
+		if (a == null || b == null) return false
 		return Note.indexOfNote(a) === Note.indexOfNote(b)
 	}
 	/**

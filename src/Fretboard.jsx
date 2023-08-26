@@ -93,12 +93,12 @@ const CircleOfFifths = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEn
     
     return (
         <>
-            { /* Circle of fifths circle */}
+            { /* Circle of fifths circle */ }
             { Scale.CircleOfFifths.map((notes, i) => (
                 <Arc key={i} x={x} y={y} innerRadius={innerRadius} outerRadius={outerRadius} 
                     startAngle={i*angle-halfAngle} endAngle={(i+1)*angle-halfAngle} padAngle={padAngle} 
-                    onMouseEnter={() => onNoteEnter(notes)} onMouseOut={() => onNoteOut()}
-                    fill={highlightNote === notes ? Scale.Colormap[i] : "white"}/>
+                    onMouseEnter={() => onNoteEnter(notes[0])} onMouseOut={() => onNoteOut()}
+                    fill={Note.eq(highlightNote, notes[0]) ? Scale.Colormap[i] : "white"}/>
             ))}
             { /* Circle of fifths texts */ }
             { Scale.CircleOfFifths.map((notes, i) => {
@@ -129,7 +129,7 @@ const CircleOfFifths = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEn
  * @param {() => (Number, Number, String)} props.onMouseOut event handler when mouse stops hovering note circle
  * @returns 
  */
-const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
+const Fretboard = ({width, board}) => {  // deleted for now: onMouseEnter=null, onMouseOut=null
     // padding on left and right side: 10%
     const paddingSide = 0.1 * width
     // x scaler
@@ -137,11 +137,14 @@ const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
     // y scaler
     const scy = scaleLinear([20, 200], [0, board.numStrings])
     // active note in circle of fifths
-    const [cofNotes, setCofNotes] = useState(null)
+    const [cofNote, setCofNote] = useState(null)
     // display function. calculates if note should be shown or not
-    const display = (note) => cofNotes && Note.eq(note, cofNotes[0])
+    const display = (note) => cofNote && Note.eq(note, cofNote)
     // color function. calculates the color according to the circle of fifths
     const indexInCof = (note) => Scale.Colormap[Scale.indexOfCircleOfFifths(note)]
+    // highlight note if note on fretboard is hovered
+    const onMouseEnter = (x, y, note) => setCofNote(note)
+    const onMouseOut = () => setCofNote(null)
 
     return (
         <>
@@ -174,8 +177,8 @@ const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
                     pointerEvents="none">{note}</text>
             ))}
             <CircleOfFifths x={350} y={300} innerRadius={30} outerRadius={100}
-                highlightNote={cofNotes}
-                onNoteEnter={notes => setCofNotes(notes)} onNoteOut={_ => setCofNotes(null)}/>
+                highlightNote={cofNote}
+                onNoteEnter={note => setCofNote(note)} onNoteOut={_ => setCofNote(null)}/>
         </>
     )
 }
