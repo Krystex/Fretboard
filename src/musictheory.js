@@ -1,5 +1,4 @@
 
-const tuning = ["E", "A", "D", "G", "B", "E"]
 const basenotes = ["A", "B", "C", "D", "E", "F", "G"]
 const basenoteidx = [0, 2, 3, 5, 7, 8, 10, 12]
 const notes = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
@@ -103,65 +102,6 @@ class Scale {
 	static Colormap = ["#DF315E","#EB5D34","#E28535","#CB9C1B","#FDC528","#B4D34A","#58BF63","#0AB59F","#00A5DD","#4B7ABA","#9059A1","#B43498"]
 }
 
-/**
- * Returns the absolute index of a note (A=0)
- * @param {String} note 
- * @returns 
- */
-function indexOfNote(note) {
-	return notes.indexOf(note)
-}
-
-/**
- * Returns the index of a note in a scale
- * @example
- * e.g. `indexOfNoteInScale("D", constructScale("C", "major"))` --> `2`
- * @param {String} note 
- * @param {Array<String>} scale 
- * @returns Number
- */
-function indexOfNoteInScale(note, scale) {
-	for (let i=0; i<scale.length; i++) {
-		if (note == scale[i]) return i
-	}
-	return null
-}
-
-/**
- * Returns if or if not a note is in a scale
- * @param {String} note 
- * @param {Array<String>} scale 
- * @returns 
- */
-function noteInScale(note, scale) {
-	for (let [i, n] of scale.entries()) {
-		if (n == note) return true
-	}
-	return false
-}
-/**
- * Constructs a scale
- * @example `constructScale("C", "major")`
- * @param {String} note 
- * @param {String} scale 
- * @returns {Array<String>} scale notes
- */
-function constructScale(note, scale) {
-	let ints = []
-	let constructed = [note]
-	if (scale == "major") ints = [2, 2, 1, 2, 2, 2, 1]
-	else if (scale == "major pentatonic") ints = [2,2,3,2,3]
-	else if (scale == "circle of fifths") ints = [7,7,7,7,7,7,7,7,7,7,7]
-	else if (scale == "major chord") ints = [4, 3]
-	else alert("dont know this scale yet")
-	for (const i of ints) {
-		const lastNote = constructed[constructed.length-1]
-		const noteIdx = (indexOfNote(lastNote) + i) % 12
-		constructed.push(notes[noteIdx])
-	}
-	return constructed
-}
-
 class FretboardCtrl {
 	/**
 	 * 
@@ -177,7 +117,7 @@ class FretboardCtrl {
 		for (let i=0; i<this.numFrets; i++) {
 			let column = []
 			for (let j=this.numStrings; j>0; j--) {
-				const note = notes[(indexOfNote(tuning[j-1]) + i) % 12]
+				const note = notes[(Note.indexOfNote(tuning[j-1]) + i) % 12]
 				column.push(note)
 			}
 			this.board.push(column)
@@ -185,9 +125,9 @@ class FretboardCtrl {
 	}
 	/**
 	 * Map fretboard notes. 
-	 * e.g. `board.map((x, y, note) => console.log(note))` returns all notes
 	 * @param {(x: Number, y: Number, note: String) => ()} callback callback with fretboard position `x`, `y` and note name `note`
 	 * @returns {Array}
+	 * @example const notes = board.map((x, y, note) => note)  // returns all notes
 	 */
 	map(callback) {
 		let results = []
