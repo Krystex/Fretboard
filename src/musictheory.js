@@ -25,7 +25,17 @@ class Note {
 		if (note.substring(1, 2) == "b") {offset = -1}  // if flat, decrement index
 		else if (note.substring(1, 2) == "#") {offset = 1}  // if sharp, increment index
 		const idx = basenotes.indexOf(Note.baseNote(note))  // get index of base note
-		return basenoteidx[idx] + offset  // calculate note distance from A to note by getting base note idx (distance in half-steps to a)
+		return (basenoteidx[idx] + offset + 12) % 12  // calculate note distance from A to note by getting base note idx (distance in half-steps to a)
+	}
+	/**
+	 * Checks if Note `a` and `b` are equal
+	 * @param {String} a Note a
+	 * @param {String} b Note b
+	 * @returns {boolean}
+	 * @example Note.eq("Ab", "G#") == true
+	 */
+	static eq(a, b) {
+		return Note.indexOfNote(a) === Note.indexOfNote(b)
 	}
 	/**
 	 * Removes flat or sharp from note.
