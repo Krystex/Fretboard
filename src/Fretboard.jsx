@@ -59,6 +59,15 @@ const CircleOfArcs = ({num, ...rest}) => {
     )
 }
 
+/**
+ * 
+ * @param {object} props
+ * @param {Number} props.x x position
+ * @param {Number} props.y y position
+ * @param {JSX.Element} props.children children of object eg. text
+ * @returns 
+ * @example <Text x={10} y={20}>Example text</Text>
+ */
 const Text = ({x, y, children, ...rest}) => (
     <text x={x} y={y} fontFamily="-apple-system, BlinkMacSystemFont, Roboto, sans-serif"
         alignmentBaseline="central" fontWeight="bold" fontSize={14}
@@ -82,6 +91,8 @@ const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
     const scx = scaleLinear([paddingSide, width-paddingSide], [0,board.numFrets])
     // y scaler
     const scy = scaleLinear([20, 200], [0, board.numStrings])
+    // active note in circle of fifths
+    const [cofNotes, setCofNotes] = useState(null)
 
     return (
         <>
@@ -113,7 +124,9 @@ const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
             ))}
             { /* Circle of fifths circle */}
             { Scale.CircleOfFifths.map((notes, i) => (
-                <Arc key={i} x={350} y={300} innerRadius={30} outerRadius={100} startAngle={i*30-14} endAngle={(i+1)*30-14} padAngle={2} text={notes[0]} fill="white" />
+                <Arc key={i} x={350} y={300} innerRadius={30} outerRadius={100} 
+                    startAngle={i*30-14} endAngle={(i+1)*30-14} padAngle={2} 
+                    onMouseEnter={() => setCofNotes(notes)} text={notes[0]} fill={cofNotes === notes ? "white" : "grey"} />
             ))}
             { /* Circle of fifths texts */ }
             { Scale.CircleOfFifths.map((notes, i) => {
