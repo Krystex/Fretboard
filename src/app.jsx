@@ -6,7 +6,7 @@ import { Fretboard } from "./Fretboard.jsx"
 
 new EventSource('/esbuild').addEventListener('change', () => location.reload())
 
-const App = (props) => {
+const App = () => {
     const tuning = ["E", "A", "D", "G", "B", "E"]
     const board = new FretboardCtrl(13, tuning)
 

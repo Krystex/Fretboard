@@ -127,6 +127,8 @@ const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
     const scy = scaleLinear([20, 200], [0, board.numStrings])
     // active note in circle of fifths
     const [cofNotes, setCofNotes] = useState(null)
+    // Color function. 
+    const indexInCof = (note) => Scale.Colormap[Scale.indexOfCircleOfFifths(note)]
 
     return (
         <>
@@ -144,7 +146,8 @@ const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
             ))}
             { /* Fretboard note circles */ }
             { board.map((x, y, note) => (
-                <circle key={`${x}-${y}`} cx={scx(x-0.5)} cy={scy(y)} r="12" fill="green" stroke="#000"
+                <circle key={`${x}-${y}`} cx={scx(x-0.5)} cy={scy(y)} r="12" stroke="#000"
+                    fill={indexInCof(note)}
                     onMouseEnter={() => onMouseEnter && onMouseEnter(x, y, note)}
                     onMouseOut={() => onMouseOut && onMouseOut(x, y, note)}></circle>
             ))}

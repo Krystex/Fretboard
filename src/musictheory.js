@@ -86,7 +86,7 @@ class Scale {
 		let ints = undefined  // intervals
 		if (scale == "major") { ints = [2, 2, 1, 2, 2, 2, 1] }
 		else if (scale == "minor" || scale == "natural minor") { ints = [2, 1, 2, 2, 1, 2, 2] }
-		else { console.error(`Scale ${scale} not yet implemented`); return }
+		else { throw `Scale ${scale} not yet implemented` }
 		for (const interval of ints) {
 			// we get next note and then sharp or flat the note. this ensures that every note only appears once in the scale
 			const lastNote = constructed[constructed.length-1]  // get last constructed note
@@ -107,11 +107,26 @@ class Scale {
 	static CircleOfFifths = [["C"], ["G"], ["D"], ["A"], ["E"], ["Cb", "B"], ["Gb", "F#"], ["Db", "C#"], ["Ab"], ["Eb"], ["Bb"], ["F"]]
 
 	/**
+	 * Returns index of note in circle of fifths
+	 * @param {String} note Note of which to calculate the index
+	 * @returns {Number | null} index
+	 */
+	static indexOfCircleOfFifths(note) {
+		for (const [i, [a, _]] of Scale.CircleOfFifths.entries()) {
+			if (Note.eq(note, a)) return i
+		}
+		return null
+	}
+
+	/**
 	 * Colormap of 12 different colors. End color warps into start color.
 	 */
 	static Colormap = ["#DF315E","#EB5D34","#E28535","#CB9C1B","#FDC528","#B4D34A","#58BF63","#0AB59F","#00A5DD","#4B7ABA","#9059A1","#B43498"]
 }
 
+/**
+ * Fretboard control class. Makes handling of notes on fretboard easier.
+ */
 class FretboardCtrl {
 	/**
 	 * 
@@ -148,25 +163,6 @@ class FretboardCtrl {
 		}
 		return results
 	}
-}
-
-/**
- * Build the fretboard.
- * @param {Number} numFrets 
- * @returns {Array<Array<String>>} 2d array with note name
- */
-function buildFretboard(numFrets=12) {
-    // TODO: add more docs
-	let fretboard = []
-	for (let i=0; i<numFrets; i++) {
-		let column = []
-		for (let j=0; j<6; j++) {
-			const note = notes[(indexOfNote(tuning[5-j]) + i) % 12]
-			column.push(note)
-		}
-		fretboard.push(column)
-	}
-	return fretboard
 }
 
 export { Note, Scale, FretboardCtrl }
