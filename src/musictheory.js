@@ -96,6 +96,11 @@ class Scale {
 	 * Circle of fifths with enharmonic equivalents
 	 */
 	static CircleOfFifths = [["C"], ["G"], ["D"], ["A"], ["E"], ["Cb", "B"], ["Gb", "F#"], ["Db", "C#"], ["Ab"], ["Eb"], ["Bb"], ["F"]]
+
+	/**
+	 * Colormap of 12 different colors. End color warps into start color.
+	 */
+	static Colormap = ["#DF315E","#EB5D34","#E28535","#CB9C1B","#FDC528","#B4D34A","#58BF63","#0AB59F","#00A5DD","#4B7ABA","#9059A1","#B43498"]
 }
 
 /**

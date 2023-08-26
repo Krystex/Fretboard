@@ -75,6 +75,40 @@ const Text = ({x, y, children, ...rest}) => (
         pointerEvents="none" {...rest}>{children}</text>
 )
 
+const CircleOfFifths = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEnter=null, onNoteOut=null}) => {
+    const angle = 360. / 12
+    const halfAngle = angle / 2 - 1  // used for shifting arcs so they are centered. minus one just because it looks a little nicer
+    const padAngle = 2
+    
+    return (
+        <>
+            { /* Circle of fifths circle */}
+            { Scale.CircleOfFifths.map((notes, i) => (
+                <Arc key={i} x={x} y={y} innerRadius={innerRadius} outerRadius={outerRadius} 
+                    startAngle={i*angle-halfAngle} endAngle={(i+1)*angle-halfAngle} padAngle={padAngle} 
+                    onMouseEnter={() => onNoteEnter(notes)} onMouseOut={() => onNoteOut()}
+                    fill={highlightNote === notes ? Scale.Colormap[i] : "white"}/>
+            ))}
+            { /* Circle of fifths texts */ }
+            { Scale.CircleOfFifths.map((notes, i) => {
+                const startAngle = i*angle-halfAngle, endAngle = (i+1)*angle-halfAngle
+                // radiusOffset is used if two notes are displayed (eg. F# and Gb)
+                //   0.18 is scaling factor for distance from middle point of radii
+                const radiusOffset = notes.length == 2 ? 0.18*(outerRadius - innerRadius) : 0
+                const [textPosX, textPosY] = pointOnCircle(innerRadius+(outerRadius - innerRadius)/2+radiusOffset, startAngle + (endAngle - startAngle)/2 - 90, offset=[x, y])
+                const [textPosX2, textPosY2] = pointOnCircle(innerRadius+(outerRadius - innerRadius)/2-radiusOffset, startAngle + (endAngle - startAngle)/2 - 90, offset=[x, y])
+
+                return (
+                    <g key={i}>
+                        <Text x={textPosX} y={textPosY}>{notes[0]}</Text>
+                        { notes.length == 2 ? <Text x={textPosX2} y={textPosY2}>{notes[1]}</Text> : "" }
+                    </g>
+                )
+            })}
+        </>
+    )
+}
+
 /**
  * 
  * @param {object} props 
@@ -122,26 +156,9 @@ const Fretboard = ({width, board, onMouseEnter=null, onMouseOut=null}) => {
                     textAnchor="middle"
                     pointerEvents="none">{note}</text>
             ))}
-            { /* Circle of fifths circle */}
-            { Scale.CircleOfFifths.map((notes, i) => (
-                <Arc key={i} x={350} y={300} innerRadius={30} outerRadius={100} 
-                    startAngle={i*30-14} endAngle={(i+1)*30-14} padAngle={2} 
-                    onMouseEnter={() => setCofNotes(notes)} text={notes[0]} fill={cofNotes === notes ? "white" : "grey"} />
-            ))}
-            { /* Circle of fifths texts */ }
-            { Scale.CircleOfFifths.map((notes, i) => {
-                const startAngle = i*30-14, endAngle = (i+1)*30-14
-                const radiusOffset = notes.length == 2 ? 0.18*(100 - 30) : 0
-                const [textPosX, textPosY] = pointOnCircle(30+(100 - 30)/2+radiusOffset, startAngle + (endAngle - startAngle)/2 - 90, offset=[350, 300])
-                const [textPosX2, textPosY2] = pointOnCircle(30+(100 - 30)/2-radiusOffset, startAngle + (endAngle - startAngle)/2 - 90, offset=[350, 300])
-
-                return (
-                    <g key={i}>
-                        <Text x={textPosX} y={textPosY}>{notes[0]}</Text>
-                        { notes.length == 2 ? <Text x={textPosX2} y={textPosY2}>{notes[1]}</Text> : "" }
-                    </g>
-                )
-            })}
+            <CircleOfFifths x={350} y={300} innerRadius={30} outerRadius={100}
+                highlightNote={cofNotes}
+                onNoteEnter={notes => setCofNotes(notes)} onNoteOut={_ => setCofNotes(null)}/>
         </>
     )
 }
