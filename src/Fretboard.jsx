@@ -59,6 +59,13 @@ const CircleOfArcs = ({num, ...rest}) => {
     )
 }
 
+const Text = ({x, y, children, ...rest}) => (
+    <text x={x} y={y} fontFamily="-apple-system, BlinkMacSystemFont, Roboto, sans-serif"
+        alignmentBaseline="central" fontWeight="bold" fontSize={14}
+        textAnchor="middle"
+        pointerEvents="none" {...rest}>{children}</text>
+)
+
 /**
  * 
  * @param {object} props 
