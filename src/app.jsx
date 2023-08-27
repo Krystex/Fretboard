@@ -11,11 +11,11 @@ const App = () => {
     const board = new FretboardCtrl(13, tuning)
 
     return (
-        <>
+        <div style={{display: "flex", justifyContent: "center"}}>
             <svg width="800" height="600">
                 <Fretboard width={800} board={board} />
             </svg>
-        </>
+        </div>
     )
 }
 
