@@ -1,0 +1,30 @@
+name: Deploy Pages
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy-pages:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm install
+      - run: npm build
+      - name: Upload artifact for pages
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: $GITHUB_WORKSPACE/public
+      - name: Deploy to GitHub pages
+        uses: actions/deploy-pages@v2
