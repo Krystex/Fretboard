@@ -26,15 +26,12 @@ jobs:
       - run: npm install
       - run: npm run build
       - name: Upload artifact for pages
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           name: github-pages
-          path: public
-      - name: Download artifact
-        uses: actions/download-artifact@v1
-        with:
-          name: github-pages
-          path: public
+          path: ./public
       - name: Deploy to GitHub pages
         id: deploy
         uses: actions/deploy-pages@v2
+        with:
+          artifact_name: github-pages
