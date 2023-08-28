@@ -8,7 +8,10 @@ jobs:
   deploy-pages:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,4 +31,5 @@ jobs:
           path: ./public
           name: github-pages
       - name: Deploy to GitHub pages
+        id: deploy
         uses: actions/deploy-pages@v2
