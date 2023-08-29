@@ -11,4 +11,4 @@ To run it locally, you need NodeJS. You can install the dependencies with `npm i
 ## Develop
 This webapp is written in React with svg. The files are bundled with [esbuild](https://esbuild.github.io).
 
-All the computations for music theory are bundled in `src/musictheory.js`.
+All the computations for music theory can be found in `src/musictheory.js`.
