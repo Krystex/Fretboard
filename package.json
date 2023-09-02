@@ -7,7 +7,7 @@
     "tailwindcss": "^3.3.3"
   },
   "scripts": {
-    "build": "esbuild src/app.jsx src/styles/app.css --bundle --outdir=public/assets/ --minify",
-    "serve": "esbuild src/app.jsx src/styles/app.css --bundle --outdir=public/assets/ --sourcemap --watch --servedir=public"
+    "build": "node esbuild.build.js --build",
+    "serve": "node esbuild.build.js --serve"
   }
 }

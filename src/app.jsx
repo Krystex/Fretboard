@@ -3,8 +3,11 @@ import { createRoot } from 'react-dom/client'
 import { FretboardCtrl } from "./musictheory.js"
 import { Fretboard } from "./Fretboard.jsx"
 
-
-new EventSource('/esbuild').addEventListener('change', () => location.reload())
+if (!window.IS_PRODUCTION) {
+    // if in development mode, wait for change message from live server
+    console.log("Development mode")
+    new EventSource('/esbuild').addEventListener('change', _ => location.reload())
+}
 
 const App = () => {
     const tuning = ["E", "A", "D", "G", "B", "E"]
