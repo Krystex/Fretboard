@@ -125,26 +125,19 @@ const CircleOfFifths = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEn
  * @param {object} props 
  * @param {Number} props.width width of svg context
  * @param {FretboardCtrl} props.board fretboard controller which holds note names, num of strings, num of frets
+ * @param {(String) => boolean} props.noteFunc note function which determines if note should be shown or not
+ * @param {(String) => String} props.colorFunc color function which determines which color should be shown for specific note
  * @param {() => (Number, Number, String)} props.onMouseEnter event handler when mouse hovers note circle
  * @param {() => (Number, Number, String)} props.onMouseOut event handler when mouse stops hovering note circle
  * @returns 
  */
-const Fretboard = ({width, board}) => {  // deleted for now: onMouseEnter=null, onMouseOut=null
+const Fretboard = ({width, board, noteFunc, colorFunc, onMouseEnter, onMouseOut}) => {  // deleted for now: onMouseEnter=null, onMouseOut=null
     // padding on left and right side: 10%
     const paddingSide = 0.1 * width
     // x scaler
     const scx = scaleLinear([paddingSide, width-paddingSide], [0,board.numFrets])
     // y scaler
     const scy = scaleLinear([20, 200], [0, board.numStrings])
-    // active note in circle of fifths
-    const [cofNote, setCofNote] = useState(null)
-    // display function. calculates if note should be shown or not
-    const display = (note) => cofNote && Note.eq(note, cofNote)
-    // color function. calculates the color according to the circle of fifths
-    const indexInCof = (note) => Scale.Colormap[Scale.indexOfCircleOfFifths(note)]
-    // highlight note if note on fretboard is hovered
-    const onMouseEnter = (x, y, note) => setCofNote(note)
-    const onMouseOut = () => setCofNote(null)
 
     return (
         <>
@@ -163,24 +156,21 @@ const Fretboard = ({width, board}) => {  // deleted for now: onMouseEnter=null, 
             { /* Fretboard note circles */ }
             { board.map((x, y, note) => (
                 <circle key={`${x}-${y}`} cx={scx(x-0.5)} cy={scy(y)} r="12" stroke="#000"
-                    fill={indexInCof(note)} opacity={display(note) ? 1 : 0}
+                    fill={colorFunc(note)} opacity={noteFunc(note) ? 1 : 0}
                     onMouseEnter={() => onMouseEnter && onMouseEnter(x, y, note)}
                     onMouseOut={() => onMouseOut && onMouseOut(x, y, note)}></circle>
             ))}
             { /* Fretboard note circles texts */ }
             { board.map((x, y, note) => (
                 <text x={scx(x-0.5)} y={scy(y)} key={`${x}-${y}`} fill="#000" fontSize="14"
-                    opacity={display(note) ? 1 : 0}
+                    opacity={noteFunc(note) ? 1 : 0}
                     fontFamily="-apple-system, BlinkMacSystemFont, Roboto, sans-serif"
                     alignmentBaseline="central"
                     textAnchor="middle"
                     pointerEvents="none">{note}</text>
             ))}
-            <CircleOfFifths x={350} y={300} innerRadius={30} outerRadius={100}
-                highlightNote={cofNote}
-                onNoteEnter={note => setCofNote(note)} onNoteOut={_ => setCofNote(null)}/>
         </>
     )
 }
 
-export { Fretboard }
+export { Fretboard, CircleOfFifths }
