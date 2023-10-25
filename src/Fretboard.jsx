@@ -85,9 +85,10 @@ const Text = ({x, y, children, ...rest}) => (
  * @param {Number} props.outerRadius outer radius of circle
  * @param {(String) => boolean} props.onNoteEnter function gets triggered if note is hovered
  * @param {(String) => boolean} props.onNoteOut function gets triggered if note is not hovered anymore
+ * @param {(String) => String} props.colorFunc color function which determines which color should be shown for specific note
  * @param {Array<string>} props.scale scale to display (eg. `Scale.Chromatic`)
  */
-const Circle12Notes = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEnter=null, onNoteOut=null, scale}) => {
+const Circle12Notes = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEnter=null, onNoteOut=null, colorFunc, scale}) => {
     const angle = 360. / 12
     const halfAngle = angle / 2 - 1  // used for shifting arcs so they are centered. minus one just because it looks a little nicer
     const padAngle = 2
@@ -99,7 +100,7 @@ const Circle12Notes = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEnt
                 <Arc key={i} x={x} y={y} innerRadius={innerRadius} outerRadius={outerRadius} 
                     startAngle={i*angle-halfAngle} endAngle={(i+1)*angle-halfAngle} padAngle={padAngle} 
                     onMouseEnter={() => onNoteEnter(notes[0])} onMouseOut={() => onNoteOut()}
-                    fill={Note.eq(highlightNote, notes[0]) ? Scale.Colormap[i] : "white"}/>
+                    fill={Note.eq(highlightNote, notes[0]) ? colorFunc(notes[0]) : "white"}/>
             ))}
             { /* Circle of fifths texts */ }
             { scale.map((notes, i) => {
@@ -131,6 +132,7 @@ const Circle12Notes = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEnt
  * @param {Number} props.outerRadius outer radius of circle
  * @param {(String) => boolean} props.onNoteEnter function gets triggered if note is hovered
  * @param {(String) => boolean} props.onNoteOut function gets triggered if note is not hovered anymore
+ * @param {(String) => String} props.colorFunc color function which determines which color should be shown for specific note
  */
 const CircleOfFifths = (props) => (
     <Circle12Notes {...props} scale={Scale.CircleOfFifths} />

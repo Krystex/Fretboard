@@ -25,10 +25,10 @@ const App = () => {
                     noteFunc={(note) => Note.eq(cofNote, note)} colorFunc={colorFunc}
                     onMouseEnter={(x, y, note) => setCofNote(note)} onMouseOut={(x, y, note) => setCofNote(null)} />
                 <CircleOfFifths x={230} y={300} innerRadius={30} outerRadius={100}
-                    highlightNote={cofNote}
+                    highlightNote={cofNote} colorFunc={colorFunc}
                     onNoteEnter={note => setCofNote(note)} onNoteOut={_ => setCofNote(null)} />
                 <ChromaticNoteCircle x={530} y={300} innerRadius={30} outerRadius={100}
-                    highlightNote={cofNote}
+                    highlightNote={cofNote} colorFunc={colorFunc}
                     onNoteEnter={note => setCofNote(note)} onNoteOut={_ => setCofNote(null)} />
             </svg>
         </div>
