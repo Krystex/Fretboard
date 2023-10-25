@@ -76,7 +76,7 @@ const Text = ({x, y, children, ...rest}) => (
 )
 
 /**
- * Circle of fifths component in svg
+ * 12-note circle, used for Circle of Fifths and Chromatic Circle
  * @param {object} props props
  * @param {Number} props.x x position
  * @param {Number} props.y y position
@@ -85,8 +85,9 @@ const Text = ({x, y, children, ...rest}) => (
  * @param {Number} props.outerRadius outer radius of circle
  * @param {(String) => boolean} props.onNoteEnter function gets triggered if note is hovered
  * @param {(String) => boolean} props.onNoteOut function gets triggered if note is not hovered anymore
+ * @param {Array<string>} props.scale scale to display (eg. `Scale.Chromatic`)
  */
-const CircleOfFifths = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEnter=null, onNoteOut=null}) => {
+const Circle12Notes = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEnter=null, onNoteOut=null, scale}) => {
     const angle = 360. / 12
     const halfAngle = angle / 2 - 1  // used for shifting arcs so they are centered. minus one just because it looks a little nicer
     const padAngle = 2
@@ -94,14 +95,14 @@ const CircleOfFifths = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEn
     return (
         <>
             { /* Circle of fifths circle */ }
-            { Scale.CircleOfFifths.map((notes, i) => (
+            { scale.map((notes, i) => (
                 <Arc key={i} x={x} y={y} innerRadius={innerRadius} outerRadius={outerRadius} 
                     startAngle={i*angle-halfAngle} endAngle={(i+1)*angle-halfAngle} padAngle={padAngle} 
                     onMouseEnter={() => onNoteEnter(notes[0])} onMouseOut={() => onNoteOut()}
                     fill={Note.eq(highlightNote, notes[0]) ? Scale.Colormap[i] : "white"}/>
             ))}
             { /* Circle of fifths texts */ }
-            { Scale.CircleOfFifths.map((notes, i) => {
+            { scale.map((notes, i) => {
                 const startAngle = i*angle-halfAngle, endAngle = (i+1)*angle-halfAngle
                 // radiusOffset is used if two notes are displayed (eg. F# and Gb)
                 //   0.18 is scaling factor for distance from middle point of radii
@@ -121,6 +122,25 @@ const CircleOfFifths = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEn
 }
 
 /**
+ * Circle of fifths component in svg
+ * @param {object} props props
+ * @param {Number} props.x x position
+ * @param {Number} props.y y position
+ * @param {String} props.highlightNote note which should be highlighted on circle
+ * @param {Number} props.innerRadius inner radius of circle
+ * @param {Number} props.outerRadius outer radius of circle
+ * @param {(String) => boolean} props.onNoteEnter function gets triggered if note is hovered
+ * @param {(String) => boolean} props.onNoteOut function gets triggered if note is not hovered anymore
+ */
+const CircleOfFifths = (props) => (
+    <Circle12Notes {...props} scale={Scale.CircleOfFifths} />
+)
+
+const ChromaticNoteCircle = (props) => (
+    <Circle12Notes {...props} scale={Scale.Chromatic} />
+)
+
+/**
  * 
  * @param {object} props 
  * @param {Number} props.width width of svg context
@@ -131,7 +151,7 @@ const CircleOfFifths = ({x, y, innerRadius, outerRadius, highlightNote, onNoteEn
  * @param {() => (Number, Number, String)} props.onMouseOut event handler when mouse stops hovering note circle
  * @returns 
  */
-const Fretboard = ({width, board, noteFunc, colorFunc, onMouseEnter, onMouseOut}) => {  // deleted for now: onMouseEnter=null, onMouseOut=null
+const Fretboard = ({width, board, noteFunc, colorFunc, onMouseEnter, onMouseOut}) => {
     // padding on left and right side: 10%
     const paddingSide = 0.1 * width
     // x scaler
@@ -173,4 +193,4 @@ const Fretboard = ({width, board, noteFunc, colorFunc, onMouseEnter, onMouseOut}
     )
 }
 
-export { Fretboard, CircleOfFifths }
+export { Fretboard, CircleOfFifths, ChromaticNoteCircle }

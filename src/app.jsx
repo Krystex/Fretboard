@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react"
 import { createRoot } from 'react-dom/client'
 import { FretboardCtrl, Note, Scale } from "./musictheory.js"
-import { Fretboard, CircleOfFifths } from "./Fretboard.jsx"
+import { Fretboard, CircleOfFifths, ChromaticNoteCircle } from "./Fretboard.jsx"
 
 if (!window.IS_PRODUCTION) {
     // if in development mode, wait for change message from live server
@@ -22,8 +22,12 @@ const App = () => {
         <div style={{display: "flex", justifyContent: "center"}}>
             <svg width="800" height="600">
                 <Fretboard width={800} board={board}
-                    noteFunc={(note) => Note.eq(cofNote, note)} colorFunc={colorFunc} />
-                <CircleOfFifths x={350} y={300} innerRadius={30} outerRadius={100}
+                    noteFunc={(note) => Note.eq(cofNote, note)} colorFunc={colorFunc}
+                    onMouseEnter={(x, y, note) => setCofNote(note)} onMouseOut={(x, y, note) => setCofNote(null)} />
+                <CircleOfFifths x={230} y={300} innerRadius={30} outerRadius={100}
+                    highlightNote={cofNote}
+                    onNoteEnter={note => setCofNote(note)} onNoteOut={_ => setCofNote(null)} />
+                <ChromaticNoteCircle x={530} y={300} innerRadius={30} outerRadius={100}
                     highlightNote={cofNote}
                     onNoteEnter={note => setCofNote(note)} onNoteOut={_ => setCofNote(null)} />
             </svg>

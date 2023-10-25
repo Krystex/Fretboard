@@ -103,9 +103,14 @@ class Scale {
 		this.notes = constructed
 	}
 	/**
-	 * Circle of fifths with enharmonic equivalents
+	 * Notes of circle of fifths with enharmonic equivalents
 	 */
 	static CircleOfFifths = [["C"], ["G"], ["D"], ["A"], ["E"], ["Cb", "B"], ["Gb", "F#"], ["Db", "C#"], ["Ab"], ["Eb"], ["Bb"], ["F"]]
+
+	/**
+	 * Notes of chromatic scale with enharmonic equivalents
+	 */
+	static Chromatic = [["C"], ["Db", "C#"], ["D"], ["Eb", "D#"], ["E"], ["F"], ["Gb", "F#"], ["G"], ["Ab", "G#"], ["A"], ["Bb", "A#"], ["B"]]
 
 	/**
 	 * Returns index of note in circle of fifths
