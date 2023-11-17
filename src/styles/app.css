@@ -1,10 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-    background-color: rgb(29, 30, 32);
-    color: white;
-}
-.container {
-    display: flex;
-    justify-content: center;
+    @apply bg-zinc-900;
+    @apply text-white;
 }
 text {
     cursor: default;
