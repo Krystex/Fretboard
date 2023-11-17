@@ -18,7 +18,7 @@ const main = async () => {
 
     const ctx = await esbuild
         .context({
-            entryPoints: ["src/app.jsx", "src/styles/app.css"],
+            entryPoints: ["src/App.jsx", "src/styles/app.css"],
             outdir: "public/assets",
             bundle: true,
             minify: build,  // if building static files, minify them
