@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react"
 import { createRoot } from 'react-dom/client'
 import { FretboardCtrl, Note, Scale } from "./musictheory.js"
 import { Fretboard, CircleOfFifths, ChromaticNoteCircle } from "./Fretboard.jsx"
+import { Row } from "./Utils.jsx"
 
 if (!window.IS_PRODUCTION) {
     // if in development mode, wait for change message from live server
@@ -19,7 +20,7 @@ const App = () => {
     const colorFunc = (note) => Scale.Colormap[Scale.indexOfCircleOfFifths(note)]
 
     return (
-        <div className="flex justify-center flex-col">
+        <div className="flex justify-center flex-col m-20">
             <nav className="border-gray-200">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <a href="#" className="flex items-center">
@@ -38,17 +39,29 @@ const App = () => {
                 </div>
             </nav>
 
-            <svg width="800" height="600">
+            <svg width="800" height="200">
                 <Fretboard width={800} board={board}
                     noteFunc={(note) => Note.eq(cofNote, note)} colorFunc={colorFunc}
                     onMouseEnter={(x, y, note) => setCofNote(note)} onMouseOut={(x, y, note) => setCofNote(null)} />
-                <CircleOfFifths x={230} y={300} innerRadius={30} outerRadius={100}
-                    highlightNote={cofNote} colorFunc={colorFunc}
-                    onNoteEnter={note => setCofNote(note)} onNoteOut={_ => setCofNote(null)} />
-                <ChromaticNoteCircle x={530} y={300} innerRadius={30} outerRadius={100}
-                    highlightNote={cofNote} colorFunc={colorFunc}
-                    onNoteEnter={note => setCofNote(note)} onNoteOut={_ => setCofNote(null)} />
             </svg>
+            <Row className="w-[500px] ml-[8rem] justify-between">
+                <div className="w-[200px]">
+                    <div className="text-white font-semibold text-center">Circle of Fifths</div>
+                    <svg width="200" height="200">
+                        <CircleOfFifths x={100} y={100} innerRadius={30} outerRadius={100}
+                            highlightNote={cofNote} colorFunc={colorFunc}
+                            onNoteEnter={note => setCofNote(note)} onNoteOut={_ => setCofNote(null)} />
+                    </svg>
+                </div>
+                <div className="w-[200px]">
+                    <div className="text-white font-semibold text-center">Chromatic Circle</div>
+                    <svg width="200" height="200">
+                        <ChromaticNoteCircle x={100} y={100} innerRadius={30} outerRadius={100}
+                            highlightNote={cofNote} colorFunc={colorFunc}
+                            onNoteEnter={note => setCofNote(note)} onNoteOut={_ => setCofNote(null)} />
+                    </svg>
+                </div>
+            </Row>
         </div>
     )
 }
