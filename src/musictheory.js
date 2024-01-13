@@ -69,6 +69,7 @@ class Note {
   }
 }
 
+
 /**
  * Holds a musical scale.
  * The notes of the scale can be accessed by `new Scale("C", "major").notes`
