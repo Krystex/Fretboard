@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from "react"
+import React, { useState } from "react"
 import { createRoot } from 'react-dom/client'
+import { createHashRouter, RouterProvider, Outlet } from "react-router-dom"
 import { FretboardCtrl, Note, Scale } from "./musictheory.js"
 import { Fretboard, CircleOfFifths, ChromaticNoteCircle } from "./Fretboard.jsx"
 import { Row } from "./Utils.jsx"
@@ -10,7 +11,19 @@ if (!window.IS_PRODUCTION) {
     new EventSource('/esbuild').addEventListener('change', _ => location.reload())
 }
 
-const App = () => {
+/**
+ * Home Page, global page which links to all other pages (not yet used)
+ */
+const HomePage = () => {
+    return (
+        <div>
+            <Outlet />
+        </div>
+    )
+}
+
+
+const CircleOfFifthsPage = () => {
     const tuning = ["E", "A", "D", "G", "B", "E"]
     const board = new FretboardCtrl(13, tuning)
 
@@ -21,7 +34,7 @@ const App = () => {
 
     return (
         <div className="flex justify-center flex-col m-20">
-            <nav className="border-gray-200">
+            {/* <nav className="border-gray-200">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <a href="#" className="flex items-center">
                         <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">Fretboard</span>
@@ -37,7 +50,7 @@ const App = () => {
                         </ul>
                     </div>
                 </div>
-            </nav>
+            </nav> */}
 
             <svg width="800" height="200">
                 <Fretboard width={800} board={board}
@@ -66,5 +79,26 @@ const App = () => {
     )
 }
 
+const router = createHashRouter([
+    { 
+        path: "/",
+        element: <CircleOfFifthsPage />,
+        children: [
+            {
+                path: "circle-of-fifths",
+                element: <CircleOfFifthsPage />
+            },
+            {
+                path: "empty",
+                element: <div>empty</div>
+            }
+        ]
+    },
+])
+
 const root = createRoot(document.getElementById("root"))
-root.render(<App />)
+root.render(
+    <React.StrictMode>
+        <RouterProvider router={router} fallbackElement={<div>placeholder</div>} />
+    </React.StrictMode>
+)

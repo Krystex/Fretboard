@@ -140,6 +140,7 @@ class FretboardCtrl {
 	 * @param {Array<String>} tuning tuning (e.g. `["E", "A", "D", "G", "B", "E"]` for guitar)
 	 */
 	constructor(numFrets, tuning) {
+		console.log("FretboardCtrl constructor")
 		this.board = []
 		this.numFrets = numFrets
 		this.numStrings = tuning.length
