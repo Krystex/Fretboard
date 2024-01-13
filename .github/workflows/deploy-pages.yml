@@ -2,7 +2,7 @@ name: Deploy Pages
 
 on:
   push:
-    branches: ["main"]
+    tags: ["v.*(?<!-dev)$"]
 
 jobs:
   deploy-pages:
