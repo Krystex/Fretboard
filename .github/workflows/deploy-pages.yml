@@ -2,7 +2,8 @@ name: Deploy Pages
 
 on:
   push:
-    tags: ["v.*(?<!-dev)$"]
+    tags:
+      - ""v*.*.*""
 
 jobs:
   deploy-pages:
