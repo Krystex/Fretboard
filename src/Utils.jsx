@@ -7,10 +7,10 @@ import React from "react"
  * @param {String} props.className ClassNames to prepend to Row HTML element
  * @returns {React.ReactElement}
  */
-const Row = ({children, className=""}) => (
-    <div className={className + ` flex flex-row justify-normal`}>
-        {children}
-    </div>
+const Row = ({ children, className = "" }) => (
+  <div className={className + ` flex flex-row justify-normal`}>
+    {children}
+  </div>
 )
 
-export {Row}
+export { Row }

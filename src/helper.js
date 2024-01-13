@@ -2,13 +2,13 @@
 /**
  * Linear Scale function similar to D3.js
  * TODO: write docs, add example
- *  */
+ */
 const scaleLinear = (domain, range) => (val) => {
-    const scaled = (val - range[0]) / (range[1] - range[0]) // value between 0 and 1
-    return scaled * (domain[1] - domain[0]) + domain[0]  // scale into domain
+  const scaled = (val - range[0]) / (range[1] - range[0]) // value between 0 and 1
+  return scaled * (domain[1] - domain[0]) + domain[0]  // scale into domain
 }
 
-const deg2rad = deg => (2*Math.PI/360)*deg
+const deg2rad = deg => (2 * Math.PI / 360) * deg
 
 /**
  * Calculates the point on a circle, given radius and angle
@@ -17,13 +17,13 @@ const deg2rad = deg => (2*Math.PI/360)*deg
  * @param {Array<Number>} offset array with two elements for offset
  * @returns {Array<Number>} x and y coordinate of point
  */
-const pointOnCircle = (radius, angle, offset=undefined) => {
-    let [x, y] = [radius * Math.cos(deg2rad(angle)), radius * Math.sin(deg2rad(angle))]
-    if (offset !== undefined) {
-        const [offsetX, offsetY] = offset
-        x += offsetX, y += offsetY
-    }
-    return [Math.round(x * 100) / 100, Math.round(y * 100) / 100]  // round to two decimal places
+const pointOnCircle = (radius, angle, offset = undefined) => {
+  let [x, y] = [radius * Math.cos(deg2rad(angle)), radius * Math.sin(deg2rad(angle))]
+  if (offset !== undefined) {
+    const [offsetX, offsetY] = offset
+    x += offsetX, y += offsetY
+  }
+  return [Math.round(x * 100) / 100, Math.round(y * 100) / 100]  // round to two decimal places
 }
 
 /**
@@ -32,12 +32,12 @@ const pointOnCircle = (radius, angle, offset=undefined) => {
  * @param {Number} max 
  * @returns {Array<Number>}
  */
-const range = (min, max, stepsize=1) => {
-    let items = []
-    for (let i=min; i<max; i+=stepsize) {
-        items.push(i)
-    }
-    return items
+const range = (min, max, stepsize = 1) => {
+  let items = []
+  for (let i = min; i < max; i += stepsize) {
+    items.push(i)
+  }
+  return items
 }
 
 export { scaleLinear, pointOnCircle, range }
