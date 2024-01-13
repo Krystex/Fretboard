@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import { createRoot } from 'react-dom/client'
 import { createHashRouter, RouterProvider, Outlet } from "react-router-dom"
 import { FretboardCtrl, Note, Scale } from "./musictheory.js"
@@ -25,7 +25,7 @@ const HomePage = () => {
 
 const CircleOfFifthsPage = () => {
   const tuning = ["E", "A", "D", "G", "B", "E"]
-  const board = new FretboardCtrl(13, tuning)
+  const board = useMemo(() => new FretboardCtrl(13, tuning), [])
 
   // active note in circle of fifths
   const [cofNote, setCofNote] = useState(null)
