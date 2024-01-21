@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React from "react"
 import { range, pointOnCircle, scaleLinear } from "./helper"
 import { FretboardCtrl, Scale, Note } from "./musictheory"
 

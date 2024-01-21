@@ -1,13 +1,33 @@
 
 /**
  * Linear Scale function similar to D3.js
- * TODO: write docs, add example
+ * @param {Array<Number>} domain output range (2-dimensional array)
+ * @param {Array<Number>} range input range (2-dimensional array)
+ * @returns {(value: Number) => Number}
+ * @example
+ * ```javascript
+ * scaler = scaleLinear([100, 200], [0, 1])
+ * scaler(0) == 100
+ * scaler(0.5) == 150
+ * scaler(1) == 200
+ * ```
  */
 const scaleLinear = (domain, range) => (val) => {
   const scaled = (val - range[0]) / (range[1] - range[0]) // value between 0 and 1
   return scaled * (domain[1] - domain[0]) + domain[0]  // scale into domain
 }
 
+/**
+ * Converts degrees to radians
+ * @param {Number} deg degrees [0 - 360]
+ * @returns {Number} radians [0 - 6.283]
+ * @example
+ * ```javascript
+ * deg2rad(0) == 0
+ * deg2rad(180) == 3.1415
+ * deg2rad(360) == 6.283
+ * ```
+ */
 const deg2rad = deg => (2 * Math.PI / 360) * deg
 
 /**
