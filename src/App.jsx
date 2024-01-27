@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react"
 import { createRoot } from 'react-dom/client'
-import { createHashRouter, RouterProvider, Outlet, Link } from "react-router-dom"
+import { createHashRouter, RouterProvider, Outlet, NavLink } from "react-router-dom"
 import { FretboardCtrl, Note, Scale } from "./musictheory.js"
 import { Fretboard, CircleOfFifths, ChromaticNoteCircle } from "./Fretboard.jsx"
 import { Row } from "./Utils.jsx"
@@ -23,6 +23,15 @@ const HomePage = () => {
   )
 }
 
+const NavbarLink = ({to, children}) => {
+  const className = "block py-2 px-3 rounded"
+  const classNameActive = className + " text-blue-500 border-red"
+  const classNameInactive = className + " text-white"
+  return (
+    <NavLink to={to} className={({isActive}) => isActive ? classNameActive : classNameInactive}>{children}</NavLink>
+  )
+}
+
 // Taken from https://flowbite.com/docs/components/navbar/#default-navbar
 const Navbar = () => (
   <nav className="border-gray-200">
@@ -38,8 +47,8 @@ const Navbar = () => (
       </button>
       <div className="pl-14">
         <ul className="font-medium flex justify-center p-4 md:p-0 border-gray-100 rounded-lg space-x-8 border-0 md">
-          <Link to={`scales`} className="block py-2 px-3 rounded text-blue-500">Scales</Link>
-          <Link to={``} className="block py-2 px-3 rounded text-blue-500">Circle of Fifths</Link>
+          <NavbarLink to="">Scales</NavbarLink>
+          <NavbarLink to="circle-of-fifths">Circle of Fifths</NavbarLink>
         </ul>
       </div>
     </div>
@@ -147,12 +156,12 @@ const router = createHashRouter([
     children: [
       {
         path: "",
-        element: <CircleOfFifthsPage />
+        element: <ScalesPage />
       },
       {
-        path: "scales",
-        element: <ScalesPage />
-      }
+        path: "circle-of-fifths",
+        element: <CircleOfFifthsPage />
+      },
     ]
   },
 ])
