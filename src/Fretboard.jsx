@@ -85,24 +85,28 @@ const Text = ({ x, y, children, ...rest }) => (
  * @param {Number} props.outerRadius outer radius of circle
  * @param {(String) => boolean} props.onNoteEnter function gets triggered if note is hovered
  * @param {(String) => boolean} props.onNoteOut function gets triggered if note is not hovered anymore
- * @param {(String) => String} props.colorFunc color function which determines which color should be shown for specific note
+ * @param {(String) => string} props.onClick function gets triggered if note (arc) is clicked. parameter is the note itself
+ * @param {(String) => boolean} porps.noteFunc function which determines if note is highlighted or not. get called for every note with note as parameter
+ * @param {(String) => String} props.colorFunc color function which determines which color should be shown for specific note. gets called for every note with note as parameter
  * @param {Array<string>} props.scale scale to display (eg. `Scale.Chromatic`)
  */
-const Circle12Notes = ({ x, y, innerRadius, outerRadius, highlightNote, onNoteEnter = null, onNoteOut = null, colorFunc, scale }) => {
+const Circle12Notes = ({ x, y, innerRadius, outerRadius, noteFunc, onNoteEnter=null, onNoteOut=null, onClick=null, colorFunc, scale }) => {
   const angle = 360. / 12
   const halfAngle = angle / 2 - 1  // used for shifting arcs so they are centered. minus one just because it looks a little nicer
   const padAngle = 2
 
   return (
     <>
-      { /* Circle of fifths circle */}
+      { /* Circle arcs */}
       {scale.map((notes, i) => (
         <Arc key={i} x={x} y={y} innerRadius={innerRadius} outerRadius={outerRadius}
           startAngle={i * angle - halfAngle} endAngle={(i + 1) * angle - halfAngle} padAngle={padAngle}
-          onMouseEnter={() => onNoteEnter(notes[0])} onMouseOut={() => onNoteOut()}
-          fill={Note.eq(highlightNote, notes[0]) ? colorFunc(notes[0]) : "white"} />
+          onMouseEnter={() => onNoteEnter && onNoteEnter(notes[0])} 
+          onMouseOut={() => onNoteOut && onNoteOut()}
+          onClick={() => onClick && onClick(notes[0])}
+          fill={noteFunc(notes[0]) ? colorFunc(notes[0]) : "white"} />
       ))}
-      { /* Circle of fifths texts */}
+      { /* Circle texts */}
       {scale.map((notes, i) => {
         const startAngle = i * angle - halfAngle, endAngle = (i + 1) * angle - halfAngle
         // radiusOffset is used if two notes are displayed (eg. F# and Gb)

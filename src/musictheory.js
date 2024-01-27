@@ -123,10 +123,15 @@ class Scale {
     this.key = key
     this.scale = scale
     let constructed = [key]  // scale starts with key note
-    let ints = undefined  // intervals
-    if (scale == "major") { ints = [2, 2, 1, 2, 2, 2, 1] }
-    else if (scale == "minor" || scale == "natural minor") { ints = [2, 1, 2, 2, 1, 2, 2] }
-    else { throw `Scale ${scale} not yet implemented` }
+
+    if (!Scale.supportedScales.includes(scale)) {
+      throw `Scale ${scale} not yet implemented`
+    }
+    const ints = {
+      "major":          [2, 2, 1, 2, 2, 2, 1],
+      "minor":          [2, 1, 2, 2, 1, 2, 2],
+      "natural minor":  [2, 1, 2, 2, 1, 2, 2],
+    }[scale]
     for (const interval of ints) {
       // we get next note and then sharp or flat the note. this ensures that every note only appears once in the scale
       const lastNote = constructed[constructed.length - 1]  // get last constructed note
@@ -141,6 +146,17 @@ class Scale {
     }
     this.notes = constructed
   }
+  /** Returns if given note is in scale or not
+   * @param {string} note Note to compare to scale
+   * @returns {boolean} is in scale
+   * @example new Scale("C", "major").has("D") == true
+   */
+  has(note) {
+    return this.notes.some(scaleNote => Note.eq(scaleNote, note))
+  }
+
+  static supportedScales = ["major", "minor", "natural minor"]
+
   /**
    * Notes of circle of fifths with enharmonic equivalents
    */

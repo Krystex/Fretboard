@@ -47,6 +47,61 @@ const Navbar = () => (
 )
 
 
+const ScalesPage = () => {
+  const tuning = ["E", "A", "D", "G", "B", "E"]
+  const [rootNote, setRootNote] = useState("C")
+  const [scaleName, setScaleName] = useState("major")
+
+  const scale = useMemo(() => new Scale(rootNote, scaleName), [rootNote, scaleName])
+  const board = useMemo(() => new FretboardCtrl(13, tuning), [])
+  const colorFunc = (note) => Scale.Colormap[Note.dist(rootNote, note)]
+
+  return (
+    <div className="flex justify-center flex-col m-20">
+      <div className="mb-8">
+        {/* Key select */}
+        <select value={rootNote} onChange={e => setRootNote(e.target.value)}
+          className="bg-gray-600 border border-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-[8rem] p-2.5 mr-4 text-center outline-none">
+          {Scale.Chromatic.map(notes =>
+            <option key={notes[0]} value={notes[0]} >
+              {notes.length == 1 && `${notes[0]}`}
+              {notes.length >  1 && `${notes[1]} / ${notes[0]}`}
+            </option>
+          )}
+        </select>
+
+        {/* Scale select */}
+        <select value={scaleName} onChange={e => setScaleName(e.target.value)}
+          className="bg-gray-600 border border-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-[8rem] p-2.5 mr-4 text-center outline-none">
+          {Scale.supportedScales.map(supportedScaleName =>
+            <option key={supportedScaleName} value={supportedScaleName}>{supportedScaleName}</option>
+          )}
+        </select>
+      </div>
+
+      <svg width="800" height="200">
+        <Fretboard width={800} board={board}
+          colorFunc={colorFunc}
+          noteFunc={(note) => scale.has(note)}
+          onMouseEnter={(x, y, note) => null} onMouseOut={(x, y, note) => null} />
+      </svg>
+      <Row className="w-[500px] ml-[8rem] justify-between">
+        <div className="w-[200px] ml-[150px]">
+          <div className="text-white font-semibold text-center pb-2">Chromatic notes</div>
+          <svg width="200" height="200">
+            <ChromaticNoteCircle x={100} y={100} innerRadius={30} outerRadius={100}
+              noteFunc={(note) => scale.has(note)} 
+              colorFunc={colorFunc} 
+              onClick={(note) => setRootNote(note)}
+              />
+          </svg>
+        </div>
+      </Row>
+    </div>
+  )
+}
+
+
 const CircleOfFifthsPage = () => {
   const tuning = ["E", "A", "D", "G", "B", "E"]
   const board = useMemo(() => new FretboardCtrl(13, tuning), [])
@@ -68,7 +123,7 @@ const CircleOfFifthsPage = () => {
           <div className="text-white font-semibold text-center">Circle of Fifths</div>
           <svg width="200" height="200">
             <CircleOfFifths x={100} y={100} innerRadius={30} outerRadius={100}
-              highlightNote={cofNote} colorFunc={colorFunc}
+              noteFunc={(note) => Note.eq(note, cofNote)} colorFunc={colorFunc}
               onNoteEnter={note => setCofNote(note)} onNoteOut={_ => setCofNote(null)} />
           </svg>
         </div>
@@ -76,7 +131,7 @@ const CircleOfFifthsPage = () => {
           <div className="text-white font-semibold text-center">Chromatic Circle</div>
           <svg width="200" height="200">
             <ChromaticNoteCircle x={100} y={100} innerRadius={30} outerRadius={100}
-              highlightNote={cofNote} colorFunc={colorFunc}
+              noteFunc={(note) => Note.eq(note, cofNote)} colorFunc={colorFunc}
               onNoteEnter={note => setCofNote(note)} onNoteOut={_ => setCofNote(null)} />
           </svg>
         </div>
@@ -96,7 +151,7 @@ const router = createHashRouter([
       },
       {
         path: "scales",
-        element: <div>Scales</div>
+        element: <ScalesPage />
       }
     ]
   },
