@@ -5,11 +5,16 @@ const notes = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
 const intervals = ["R", "m2", "2", "m3", "3", "4", "d5", "5", "m6", "6", "m7", "7"]
 const intervals_ = ["R", "m2", "M2", "m3", "M3", "P4", "d5", "P5", "m6", "M6", "m7", "M7"]
 
+/**
+ * Calculations with a note of the 12-tone-system
+ */
 class Note {
   /**
    * Returns distance between two notes in semitones
    * @param {string} a note
    * @param {string} b note
+   * @returns {Number} distance
+   * @example Note.dist("C", "C#") == 1
    */
   static dist(a, b) {
     return (Note.indexOfNote(b) - Note.indexOfNote(a) + 12) % 12
@@ -17,15 +22,48 @@ class Note {
   /**
    * Returns index of note, relative to A. Used for calculating distance between notes.
    * e.g. A -> 0, Ab -> -1, B -> 2, C -> 3
-   * @param {string} note 
+   * @param {string} note note
+   * @returns {boolean} is sharp or flat
    */
   static indexOfNote(note) {
     let offset
-    if (note.length == 1) { offset = 0 }  // if not sharp or flat
-    if (note.substring(1, 2) == "b") { offset = -1 }  // if flat, decrement index
-    else if (note.substring(1, 2) == "#") { offset = 1 }  // if sharp, increment index
+    if (Note.isSharpOrFlat(note)) { offset = 0 }  // if not sharp or flat
+    else if (Note.isFlat(note)) { offset = -1 }  // if flat, decrement index
+    else if (Note.isSharp(note)) { offset = 1 }  // if sharp, increment index
     const idx = basenotes.indexOf(Note.baseNote(note))  // get index of base note
     return (basenoteidx[idx] + offset + 12) % 12  // calculate note distance from A to note by getting base note idx (distance in half-steps to a)
+  }
+  /**
+   * Returns if note is sharp or flat
+   * @param {string} note note
+   */
+  static isSharpOrFlat(note) {
+    if (note.length > 2) {
+      throw "Right now, only notes with one # or b are supported."
+    }
+    return note.length === 1
+  }
+  /**
+   * Returns if note is flat
+   * @param {string} note note
+   * @returns {boolean} is flat
+   */
+  static isFlat(note) {
+    if (note.length > 2) {
+      throw "Right now, only notes with one # or b are supported."
+    }
+    return note.substring(1, 2) === "b"
+  }
+  /**
+   * Returns if note is sharp
+   * @param {string} note note
+   * @returns {boolean} is sharp
+   */
+  static isSharp(note) {
+    if (note.length > 2) {
+      throw "Right now, only notes with one # or b are supported."
+    }
+    return note.substring(1, 2) === "#"
   }
   /**
    * Checks if Note `a` and `b` are equal
@@ -35,7 +73,7 @@ class Note {
    * @example Note.eq("Ab", "G#") == true
    */
   static eq(a, b) {
-    if (a == null || b == null) return false
+    if (a === null || b === null) return false
     return Note.indexOfNote(a) === Note.indexOfNote(b)
   }
   /**
