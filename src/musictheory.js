@@ -141,7 +141,6 @@ class FretboardCtrl {
    * @param {Array<String>} tuning tuning (e.g. `["E", "A", "D", "G", "B", "E"]` for guitar)
    */
   constructor(numFrets, tuning) {
-    console.log("FretboardCtrl constructor")
     this.board = []
     this.numFrets = numFrets
     this.numStrings = tuning.length
@@ -158,7 +157,7 @@ class FretboardCtrl {
   }
   /**
    * Map fretboard notes. 
-   * @param {(x: Number, y: Number, note: String) => ()} callback callback with fretboard position `x`, `y` and note name `note`
+   * @param {(x: Number, y: Number, note: String) => ()} callback callback with fretboard position `fret`, `string` and note name `note`
    * @returns {Array}
    * @example const notes = board.map((x, y, note) => note)  // returns all notes
    */
