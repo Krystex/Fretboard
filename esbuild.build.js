@@ -30,7 +30,7 @@ const main = async () => {
         })
       ],
       define: {
-        "IS_PRODUCTION": build ? "true" : "false"
+        "window.IS_PRODUCTION": build ? "true" : "false"
       }
     })
   if (serve) {
