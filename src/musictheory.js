@@ -105,6 +105,29 @@ class Note {
     // TODO: make compatible with enharmonic equivalents
     return notes[(newnoteidx + 12) % 12]
   }
+  /**
+   * 
+   * @param {String} note Note
+   * @param {Number} semitones Number of semitones (1 or 2)
+   * @returns {String} Resulting note
+   */
+  static addSemitonesScale(note, semitones) {
+    if (semitones > 2) {
+      throw `Doesn't support over 2 semitones right now`
+    }
+    const nextNote = Note.nextBaseNote(note)
+    const noteDistance = Note.dist(note, nextNote)
+    // now flat or sharp note, depending how many semi-tones are between both notes
+    if (noteDistance == semitones) {
+      return nextNote
+    } else if (noteDistance - 1 == semitones) {
+      return nextNote + "b"
+    } else if (noteDistance + 1 == semitones) {
+      return nextNote + "#"
+    } else {
+      throw `Not Implemented`
+    }
+  }
 }
 
 
@@ -122,6 +145,8 @@ class Scale {
   constructor(key, scale) {
     this.key = key
     this.scale = scale
+    this.numFlats = 0
+    this.numSharps = 0
     let constructed = [key]  // scale starts with key note
 
     if (!Scale.supportedScales.includes(scale)) {
@@ -134,15 +159,15 @@ class Scale {
     }[scale]
     for (const interval of ints) {
       // we get next note and then sharp or flat the note. this ensures that every note only appears once in the scale
-      const lastNote = constructed[constructed.length - 1]  // get last constructed note
-      let nextNote = Note.nextBaseNote(lastNote)  // calculate next base note (A -> B, B -> C)
-      const noteDistance = Note.dist(lastNote, nextNote)  // calculate note distance between both. 
-      if (noteDistance < interval) {  // now flat or sharp note, depending how many semi-tones are between both notes
-        nextNote += "#"
-      } else if (noteDistance > interval) {
-        nextNote += "b"
+      // get last constructed note
+      const lastNote = constructed[constructed.length - 1]
+      const nextNote = Note.addSemitonesScale(lastNote, interval)
+      if (Note.isSharp(nextNote)) {
+        this.numSharps += 1
+      } else if (Note.isFlat(nextNote)) {
+        this.numFlats += 1
       }
-      constructed.push(nextNote)  // add to constructed scale
+      constructed.push(nextNote)
     }
     this.notes = constructed
   }
@@ -155,7 +180,22 @@ class Scale {
     return this.notes.some(scaleNote => Note.eq(scaleNote, note))
   }
 
-  static supportedScales = ["major", "minor", "natural minor"]
+  /**
+   * Calculates if key has sharps, flats or no accidentals.
+   * Returns '#' if it has sharps, 'b' if it has flats, '' if it has no accidentals.
+   * @returns {string}
+   */
+  whichAccidental() {
+    if (this.numFlats > 0) {
+      return "b"
+    } else if (this.numSharps > 0) {
+      return "#"
+    } else {
+      return ""
+    }
+  }
+
+  static supportedScales = ["major", "natural minor"]
 
   /**
    * Notes of circle of fifths with enharmonic equivalents
