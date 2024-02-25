@@ -106,14 +106,19 @@ class Note {
     return notes[(newnoteidx + 12) % 12]
   }
   /**
-   * 
-   * @param {String} note Note
+   * Function for constructing scales by half/whole steps. 
+   * Always returns the next base key with possibly a sharp/flat.
+   * If the resulting note would have double flats/sharps, an error is thrown.
+   * @param {String} note Input note
    * @param {Number} semitones Number of semitones (1 or 2)
    * @returns {String} Resulting note
+   * @example Note.addSemitonesScale("C", 2) == "D"
+   * @example Note.addSemitonesScale("C", 1) == "Db"
+   * @example Note.addSemitonesScale("D#", 2) # --> throws Error
    */
   static addSemitonesScale(note, semitones) {
     if (semitones > 2) {
-      throw `Doesn't support over 2 semitones right now`
+      throw new Error(`Doesn't support over 2 semitones right now`)
     }
     const nextNote = Note.nextBaseNote(note)
     const noteDistance = Note.dist(note, nextNote)
@@ -125,8 +130,26 @@ class Note {
     } else if (noteDistance + 1 == semitones) {
       return nextNote + "#"
     } else {
-      throw `Not Implemented`
+      throw new Error(`Double sharp/flat not implemented`)
     }
+  }
+  
+  /**
+   * Returns the harmonic equivalent of a note, if possible.
+   * @param {string} note Input note
+   * @returns {string} Enharmonic note
+   * @example Note.enharmonic("C#") == "Db"
+   * @example Note.enharmonic("C") == "C"
+   */
+  static enharmonic(note) {
+    if (note.length == 1) return note
+    return {
+      "C#": "Db", "Db": "C#",
+      "D#": "Eb", "Eb": "D#",
+      "F#": "Gb", "Gb": "F#",
+      "G#": "Ab", "Ab": "G#",
+      "A#": "Bb", "Bb": "A#"
+    }[note]
   }
 }
 
