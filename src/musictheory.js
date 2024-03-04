@@ -175,25 +175,43 @@ class Scale {
     if (!Scale.supportedScales.includes(scale)) {
       throw `Scale ${scale} not yet implemented`
     }
-    const ints = {
+    const intervals = {
       "major":          [2, 2, 1, 2, 2, 2, 1],
       "minor":          [2, 1, 2, 2, 1, 2, 2],
       "natural minor":  [2, 1, 2, 2, 1, 2, 2],
     }[scale]
-    for (const interval of ints) {
+    
+    try {
+      const {numSharps, numFlats, notes} = Scale.construct_scale(this.key, intervals)
+      this.numSharps = numSharps; this.numFlats = numFlats; this.notes = notes
+    } catch (error) {
+      this.key = Note.enharmonic(this.key)
+      const {numSharps, numFlats, notes} = Scale.construct_scale(this.key, intervals)
+      this.numSharps = numSharps; this.numFlats = numFlats; this.notes = notes
+    }
+  }
+  /**
+   * 
+   */
+  static construct_scale(key, intervals) {
+    let notes = [key]  // scale starts with key note
+    let numSharps = 0
+    let numFlats = 0
+    for (const interval of intervals) {
       // we get next note and then sharp or flat the note. this ensures that every note only appears once in the scale
       // get last constructed note
-      const lastNote = constructed[constructed.length - 1]
+      const lastNote = notes[notes.length - 1]
       const nextNote = Note.addSemitonesScale(lastNote, interval)
       if (Note.isSharp(nextNote)) {
-        this.numSharps += 1
+        numSharps += 1
       } else if (Note.isFlat(nextNote)) {
-        this.numFlats += 1
+        numFlats += 1
       }
-      constructed.push(nextNote)
+      notes.push(nextNote)
     }
-    this.notes = constructed
+    return {numSharps, numFlats, notes}
   }
+
   /** Returns if given note is in scale or not
    * @param {string} note Note to compare to scale
    * @returns {boolean} is in scale
