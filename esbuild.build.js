@@ -1,5 +1,6 @@
-const esbuild = require("esbuild")
-const postCssPlugin = require("esbuild-style-plugin")
+import esbuild from "esbuild"
+import postCssPlugin from "esbuild-style-plugin"
+import tailwindcss from "tailwindcss"
 
 const main = async () => {
   // if no arguments are given, output help and exit
@@ -25,7 +26,7 @@ const main = async () => {
       plugins: [
         postCssPlugin({
           postcss: {
-            plugins: [require("tailwindcss")]
+            plugins: [tailwindcss]
           }
         })
       ],
