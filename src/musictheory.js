@@ -170,7 +170,6 @@ class Scale {
     this.scale = scale
     this.numFlats = 0
     this.numSharps = 0
-    let constructed = [key]  // scale starts with key note
 
     if (!Scale.supportedScales.includes(scale)) {
       throw `Scale ${scale} not yet implemented`
@@ -244,9 +243,28 @@ class Scale {
   static CircleOfFifths = [["C"], ["G"], ["D"], ["A"], ["E"], ["Cb", "B"], ["Gb", "F#"], ["Db", "C#"], ["Ab"], ["Eb"], ["Bb"], ["F"]]
 
   /**
-   * Notes of chromatic scale with enharmonic equivalents
+   * Notes of chromatic scale with enharmonic equivalents, starting at C
    */
   static Chromatic = [["C"], ["Db", "C#"], ["D"], ["Eb", "D#"], ["E"], ["F"], ["Gb", "F#"], ["G"], ["Ab", "G#"], ["A"], ["Bb", "A#"], ["B"]]
+
+  /**
+   * Notes of chromatic scale with enharmonic equivalents, starting at A 
+   */
+  static Chromatic_ = [["A"], ["Bb", "A#"], ["B"], ["C"], ["Db", "C#"], ["D"], ["Eb", "D#"], ["E"], ["F"], ["Gb", "F#"], ["G"], ["Ab", "G#"]]
+
+  /**
+   * Index of a note, relative to A
+   * @param {String} note Input note
+   * @returns {Number} Index of note, relative to A
+   * @example Scale.indexOf("A") == 0
+   * @example Scale.indexOf("A#") == 1
+   */
+  static indexOf(note) {
+    for (const [i, [a, _]] of Scale.Chromatic_.entries()) {
+      if (Note.eq(note, a)) return i
+    }
+    return null
+  }
 
   /**
    * Returns index of note in circle of fifths
@@ -275,16 +293,28 @@ class FretboardCtrl {
    * @param {Number} numFrets number of frets (e.g. 12 for guitar)
    * @param {Array<String>} tuning tuning (e.g. `["E", "A", "D", "G", "B", "E"]` for guitar)
    */
-  constructor(numFrets, tuning) {
+  constructor(numFrets, tuning, accidental="") {
     this.board = []
     this.numFrets = numFrets
     this.numStrings = tuning.length
     this.tuning = tuning
+    this.accidental = accidental
 
     for (let i = 0; i < this.numFrets; i++) {
       let column = []
       for (let j = this.numStrings; j > 0; j--) {
-        const note = notes[(Note.indexOfNote(tuning[j - 1]) + i) % 12]
+        const idx = (Note.indexOfNote(tuning[j - 1]) + i) % 12
+        let note = Scale.Chromatic_[idx]
+        // TODO: Cleanup
+        if (note.length === 1) {
+          note = note[0]
+        } else if (note.length == 2) {
+          if (accidental === "#") {
+            note = note[1]
+          } else {
+            note = note[0]
+          }
+        }
         column.push(note)
       }
       this.board.push(column)

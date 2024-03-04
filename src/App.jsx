@@ -12,7 +12,7 @@ if (!window.IS_PRODUCTION) {
 }
 
 /**
- * Home Page, global page which links to all other pages (not yet used)
+ * Home Page, global page which links to all other pages
  */
 const HomePage = () => {
   return (
@@ -62,20 +62,19 @@ const ScalesPage = () => {
   const [scaleName, setScaleName] = useState("major")
 
   const scale = useMemo(() => new Scale(rootNote, scaleName), [rootNote, scaleName])
-  const board = useMemo(() => new FretboardCtrl(13, tuning), [])
+  const board = useMemo(() => new FretboardCtrl(13, tuning, scale.whichAccidental()), [scale])
   const colorFunc = (note) => Scale.Colormap[Note.dist(rootNote, note)]
 
   return (
     <div className="flex justify-center flex-col m-20">
       <div className="mb-8">
         {/* Key select */}
-        <select value={rootNote} onChange={e => setRootNote(e.target.value)}
+        <select value={scale.key} onChange={e => setRootNote(e.target.value)}
           className="bg-gray-600 border border-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-[8rem] p-2.5 mr-4 text-center outline-none">
           {Scale.Chromatic.map(notes =>
-            <option key={notes[0]} value={notes[0]} >
-              {notes.length == 1 && `${notes[0]}`}
-              {notes.length >  1 && `${notes[1]} / ${notes[0]}`}
-            </option>
+            notes.map(note => 
+              <option value={note} key={note}>{note}</option>
+            )
           )}
         </select>
 
@@ -94,6 +93,7 @@ const ScalesPage = () => {
           noteFunc={(note) => scale.has(note)}
           onMouseEnter={(x, y, note) => null} onMouseOut={(x, y, note) => null} />
       </svg>
+
       <Row className="w-[500px] ml-[8rem] justify-between">
         <div className="w-[200px] ml-[150px]">
           <div className="text-white font-semibold text-center pb-2">Chromatic notes</div>
@@ -101,8 +101,7 @@ const ScalesPage = () => {
             <ChromaticNoteCircle x={100} y={100} innerRadius={30} outerRadius={100}
               noteFunc={(note) => scale.has(note)} 
               colorFunc={colorFunc} 
-              onClick={(note) => setRootNote(note)}
-              />
+              onClick={(note) => setRootNote(note)} />
           </svg>
         </div>
       </Row>
