@@ -8,6 +8,22 @@ suite('notes', () => {
     assert.isTrue(Note.dist("C", "D") == 2)
     assert.isTrue(Note.dist("C", "B") == 11)
   })
+
+  test("enharmonic of note", () => {
+    assert.that(Note.enharmonic("C")).isEqualTo("C")
+    assert.that(Note.enharmonic("C#")).isEqualTo("Db")
+    assert.that(Note.enharmonic("Db")).isEqualTo("C#")
+    assert.that(Note.enharmonic("D#")).isEqualTo("Eb")
+    assert.that(Note.enharmonic("Eb")).isEqualTo("D#")
+  })
+
+  test("add semitones to scale", () => {
+    assert.that(Note.addSemitonesScale("C", 2)).isEqualTo("D")
+    assert.that(Note.addSemitonesScale("C", 1)).isEqualTo("Db")
+    assert.that(Note.addSemitonesScale("C#", 1)).isEqualTo("D")
+    assert.that(Note.addSemitonesScale("D", 1)).isEqualTo("Eb")
+    // assert.that(Note.addSemitonesScale("Db", 2)).isEqualTo("E")
+  })
 })
 
 suite("scale", () => {
