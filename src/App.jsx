@@ -60,6 +60,7 @@ const ScalesPage = () => {
   const tuning = ["E", "A", "D", "G", "B", "E"]
   const [rootNote, setRootNote] = useState("C")
   const [scaleName, setScaleName] = useState("major")
+  const [showNotes, setShowNotes] = useState(true)
 
   const scale = useMemo(() => new Scale(rootNote, scaleName), [rootNote, scaleName])
   const board = useMemo(() => new FretboardCtrl(13, tuning, scale.whichAccidental()), [scale])
@@ -86,7 +87,7 @@ const ScalesPage = () => {
           )}
         </select>
 
-        <Toggle />
+        <Toggle active={showNotes} onChange={() => setShowNotes(!showNotes)} />
       </div>
 
       <svg width="800" height="200">
