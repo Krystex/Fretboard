@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { createHashRouter, RouterProvider, Outlet, NavLink } from "react-router-dom"
 import { FretboardCtrl, Note, Scale } from "./musictheory.js"
 import { Fretboard, CircleOfFifths, ChromaticNoteCircle } from "./Fretboard.jsx"
-import { Row, Toggle } from "./UI.jsx"
+import { Row, ToggleTwoText } from "./UI.jsx"
 
 if (!window.IS_PRODUCTION) {
   // if in development mode, wait for change message from live server
@@ -87,7 +87,8 @@ const ScalesPage = () => {
           )}
         </select>
 
-        <Toggle active={showNotes} onChange={() => setShowNotes(!showNotes)} />
+        <ToggleTwoText active={showNotes} onChange={() => setShowNotes(!showNotes)} 
+          leftText="Note" rightText="Interval" />
       </div>
 
       <svg width="800" height="200">
