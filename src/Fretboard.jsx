@@ -153,11 +153,12 @@ const ChromaticNoteCircle = (props) => (
  * @param {FretboardCtrl} props.board fretboard controller which holds note names, num of strings, num of frets
  * @param {(String) => boolean} props.noteFunc note function which determines if note should be shown or not
  * @param {(String) => String} props.colorFunc color function which determines which color should be shown for specific note
+ * @param {(Number) => String} props.displayFunc function which determines text of fretboard circle. parameter is the note index
  * @param {() => (Number, Number, String)} props.onMouseEnter event handler when mouse hovers note circle
  * @param {() => (Number, Number, String)} props.onMouseOut event handler when mouse stops hovering note circle
  * @returns 
  */
-const Fretboard = ({ width, board, noteFunc, colorFunc, onMouseEnter, onMouseOut }) => {
+const Fretboard = ({ width, board, noteFunc, colorFunc, displayFunc, onMouseEnter, onMouseOut }) => {
   // padding on left and right side: 10%
   const paddingSide = 0.1 * width
   // x scaler
@@ -193,7 +194,10 @@ const Fretboard = ({ width, board, noteFunc, colorFunc, onMouseEnter, onMouseOut
           fontFamily="-apple-system, BlinkMacSystemFont, Roboto, sans-serif"
           alignmentBaseline="central"
           textAnchor="middle"
-          pointerEvents="none">{note}</text>
+          pointerEvents="none"
+        >
+          {displayFunc ? displayFunc(note) : note }
+        </text>
       ))}
     </>
   )

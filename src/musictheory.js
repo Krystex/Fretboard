@@ -2,8 +2,6 @@
 const basenotes = ["A", "B", "C", "D", "E", "F", "G"]
 const basenoteidx = [0, 2, 3, 5, 7, 8, 10, 12]
 const notes = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
-const intervals = ["R", "m2", "2", "m3", "3", "4", "d5", "5", "m6", "6", "m7", "7"]
-const intervals_ = ["R", "m2", "M2", "m3", "M3", "P4", "d5", "P5", "m6", "M6", "m7", "M7"]
 
 /**
  * Calculations with a note of the 12-tone-system
@@ -97,10 +95,10 @@ class Note {
    * @returns {String} note
    */
   static addInt(note, int) {
-    if (!intervals.includes(int)) {
+    if (!Scale.Intervals.includes(int)) {
       throw `Doesn't support interval ${int}. Possible values: ${intervals}`
     }
-    let hs = intervals.indexOf(int)  // half steps of interval
+    let hs = Scale.Intervals.indexOf(int)  // half steps of interval
     let newnoteidx = Note.indexOfNote(note) + hs  // add half steps to interval
     // TODO: make compatible with enharmonic equivalents
     return notes[(newnoteidx + 12) % 12]
@@ -253,6 +251,11 @@ class Scale {
   static Chromatic_ = [["A"], ["Bb", "A#"], ["B"], ["C"], ["Db", "C#"], ["D"], ["Eb", "D#"], ["E"], ["F"], ["Gb", "F#"], ["G"], ["Ab", "G#"]]
 
   /**
+   * Interval names
+   */
+  static Intervals = ["R", "m2", "2", "m3", "3", "4", "d5", "5", "m6", "6", "m7", "7"]
+
+  /**
    * Index of a note, relative to A
    * @param {String} note Input note
    * @returns {Number} Index of note, relative to A
@@ -322,7 +325,7 @@ class FretboardCtrl {
   }
   /**
    * Map fretboard notes. 
-   * @param {(x: Number, y: Number, note: String) => ()} callback callback with fretboard position `fret`, `string` and note name `note`
+   * @param {(fret: Number, string: Number, note: String) => ()} callback callback with fretboard position `fret`, `string` and note name `note`
    * @returns {Array}
    * @example const notes = board.map((x, y, note) => note)  // returns all notes
    */

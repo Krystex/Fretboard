@@ -60,11 +60,13 @@ const ScalesPage = () => {
   const tuning = ["E", "A", "D", "G", "B", "E"]
   const [rootNote, setRootNote] = useState("C")
   const [scaleName, setScaleName] = useState("major")
-  const [showNotes, setShowNotes] = useState(true)
-
+  const [notesOrInterval, setNotesOrInterval] = useState(true)
+  
   const scale = useMemo(() => new Scale(rootNote, scaleName), [rootNote, scaleName])
   const board = useMemo(() => new FretboardCtrl(13, tuning, scale.whichAccidental()), [scale])
   const colorFunc = (note) => Scale.Colormap[Note.dist(rootNote, note)]
+  // if interval mode is enable, display the intervals with this function
+  const displayFunc = (note) => Scale.Intervals[Note.dist(rootNote, note)]
 
   return (
     <div className="flex justify-center flex-col m-20">
@@ -87,7 +89,7 @@ const ScalesPage = () => {
           )}
         </select>
 
-        <ToggleTwoText active={showNotes} onChange={() => setShowNotes(!showNotes)} 
+        <ToggleTwoText active={notesOrInterval} onChange={() => setNotesOrInterval(!notesOrInterval)} 
           leftText="Note" rightText="Interval" />
       </div>
 
@@ -95,6 +97,7 @@ const ScalesPage = () => {
         <Fretboard width={800} board={board}
           colorFunc={colorFunc}
           noteFunc={(note) => scale.has(note)}
+          displayFunc={notesOrInterval && displayFunc}
           onMouseEnter={(x, y, note) => null} onMouseOut={(x, y, note) => null} />
       </svg>
 
