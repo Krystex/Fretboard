@@ -1,8 +1,12 @@
 # Interactive Fretboard Visualizations
 
-> Interactive fretboard visualization for learning music theory on the guitar (work in progress).
+> An interactive fretboard website for learning music theory on the guitar.
 
 You can visit it online at [https://krystex.github.io/Fretboard/](https://krystex.github.io/Fretboard/)
+
+<p align="center">
+    <img src=".docs/screenshot.png" width="700">
+<p>
 
 ## Run Locally
 
