@@ -39,4 +39,19 @@ const ToggleTwoText = ({active, onChange, leftText, rightText}) => {
   )
 }
 
-export { Row, ToggleTwoText }
+/**
+ * Box component. A rounded, gray box with padding, which can be used for text.
+ * @param {object} props
+ * @param {object} props.children Childen to display in the box
+ * @param {string} props.className Classnames to preprent to the style
+ * @returns 
+ */
+const Box = ({ children, className = "" }) => {
+  return (
+    <div className={className + ` block p-6 mb-12 bg-zinc-800 rounded-lg`}>
+      {children}
+    </div>
+  )
+}
+
+export { Row, Box, ToggleTwoText }

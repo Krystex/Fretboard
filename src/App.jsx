@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { createHashRouter, RouterProvider, Outlet, NavLink } from "react-router-dom"
 import { FretboardCtrl, Note, Scale } from "./musictheory.js"
 import { Fretboard, CircleOfFifths, ChromaticNoteCircle } from "./Fretboard.jsx"
-import { Row, ToggleTwoText } from "./UI.jsx"
+import { Row, Box, ToggleTwoText } from "./UI.jsx"
 
 if (!window.IS_PRODUCTION) {
   // if in development mode, wait for change message from live server
@@ -72,8 +72,7 @@ const ScalesPage = () => {
     <div className="flex justify-center flex-col m-20">
       <div className="mb-20">
         {/* Intro Card */}
-        <div className="block p-6 mb-12 bg-zinc-800 rounded-lg">
-          <p>
+        <Box>
           Welcome to our interactive fretboard tool, designed to help you navigate and understand the guitar fretboard in a more intuitive and engaging way. 
           <br/> <br/>
           This interactive tool allows you to explore the fretboard in various ways, including:
@@ -86,8 +85,7 @@ const ScalesPage = () => {
           Our interactive fretboard is designed to be a valuable resource for guitarists of all levels, 
           from beginners looking to learn the basics of the fretboard to more advanced players seeking 
           to improve their understanding of music theory and its application on the guitar.
-          </p>
-        </div>
+        </Box>
         {/* Key select */}
         <select value={scale.key} onChange={e => setRootNote(e.target.value)}
           className="bg-gray-600 border border-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-[8rem] p-2.5 mr-4 text-center outline-none">
