@@ -143,6 +143,18 @@ const CircleOfFifthsPage = () => {
 
   return (
     <div className="flex justify-center flex-col m-20">
+      <Box>
+        Here you can see how the circle of fifths works together with the fretboard. <br/>
+        Simply hover over the <b>fretboard</b>, the <b>circle of fifths </b> 
+        or the <b>chromatic circle</b> and you will see how that note translates to the other formats.
+
+        <br/> <br />
+        In standard tuning, you will encounter the following behaviour: <br/>
+        When you stay on one string and <b>move up or down a fret</b>, you are walking up or down the chromatic circle.
+        <br />
+        When you stay on one fret and <b>move up or down a string</b>, you are walking up or down the circle of fifths,
+        because the guitar is tuned in fourths.
+      </Box>
       <svg width="800" height="200">
         <Fretboard width={800} board={board}
           noteFunc={(note) => Note.eq(cofNote, note)} colorFunc={colorFunc}
