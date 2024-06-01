@@ -161,13 +161,16 @@ const ChromaticNoteCircle = (props) => (
 const Fretboard = ({ width, board, noteFunc, colorFunc, displayFunc, onMouseEnter, onMouseOut }) => {
   // padding on left and right side: 10%
   const paddingSide = 0.1 * width
+  const stringSpace = 30
+  const height = 20 + board.numStrings * stringSpace
+
   // x scaler
   const scx = scaleLinear([paddingSide, width - paddingSide], [0, board.numFrets])
   // y scaler
-  const scy = scaleLinear([20, 200], [0, board.numStrings])
+  const scy = scaleLinear([20, height], [0, board.numStrings])
 
   return (
-    <>
+    <svg width={width} height={height}>
       { /* Horizontal Lines */}
       {range(0, board.numStrings).map(i => (
         <Line key={i} fromx={scx(0)} fromy={scy(i)} tox={scx(board.numFrets - 1)} toy={scy(i)} stroke="#aaa" strokeWidth="1.5" />
@@ -199,7 +202,7 @@ const Fretboard = ({ width, board, noteFunc, colorFunc, displayFunc, onMouseEnte
           {displayFunc ? displayFunc(note) : note }
         </text>
       ))}
-    </>
+    </svg>
   )
 }
 

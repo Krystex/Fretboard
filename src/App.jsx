@@ -139,13 +139,11 @@ const ScalesPage = () => {
           leftText="Note" rightText="Interval" />
       </div>
 
-      <svg width="800" height="200">
-        <Fretboard width={800} board={board}
-          colorFunc={colorFunc}
-          noteFunc={(note) => scale.has(note)}
-          displayFunc={notesOrInterval && displayFunc}
-          onMouseEnter={(x, y, note) => null} onMouseOut={(x, y, note) => null} />
-      </svg>
+      <Fretboard width={800} board={board}
+        colorFunc={colorFunc}
+        noteFunc={(note) => scale.has(note)}
+        displayFunc={notesOrInterval && displayFunc}
+        onMouseEnter={(x, y, note) => null} onMouseOut={(x, y, note) => null} />
 
       <Row className="w-[500px] ml-[8rem] justify-between">
         <div className="w-[200px] ml-[150px]">
@@ -186,11 +184,9 @@ const CircleOfFifthsPage = () => {
         When you stay on one fret and <b>move up or down a string</b>, you are walking up or down the circle of fifths,
         because the guitar is tuned in fourths.
       </Box>
-      <svg width="800" height="200">
-        <Fretboard width={800} board={board}
-          noteFunc={(note) => Note.eq(cofNote, note)} colorFunc={colorFunc}
-          onMouseEnter={(x, y, note) => setCofNote(note)} onMouseOut={(x, y, note) => setCofNote(null)} />
-      </svg>
+      <Fretboard width={800} board={board}
+        noteFunc={(note) => Note.eq(cofNote, note)} colorFunc={colorFunc}
+        onMouseEnter={(x, y, note) => setCofNote(note)} onMouseOut={(x, y, note) => setCofNote(null)} />
       <Row className="w-[500px] ml-[8rem] justify-between">
         <div className="w-[200px]">
           <div className="text-white font-semibold text-center">Circle of Fifths</div>
