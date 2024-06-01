@@ -55,15 +55,40 @@ const Navbar = () => (
   </nav>
 )
 
+/**
+ * Make sure tuning input is valid. Only returns valid tuning string
+ * @param {string} text Tuning input
+ * @returns {string} Valid tuning input
+ */
+const processTuning = (text) => {
+  const validChars = ["A", "B", "C", "D", "E", "F", "G"]
+  let notes = []
+  for (let i=0; i<text.length; i++) {
+    if (validChars.includes(text[i])) {
+      notes.push(text[i])
+    } else if (["b", "#"].includes(text[i]) && notes.length && validChars.includes(notes[notes.length - 1])) {
+      notes[notes.length-1] += text[i]
+    }
+  }
+  return notes
+}
 
 const ScalesPage = () => {
-  const tuning = ["E", "A", "D", "G", "B", "E"]
+  const [tuning, setTuning] = useState(["E", "A", "D", "G", "B", "E"])
+  const [tuningText, setTuningText] = useState(tuning.join(""))
   const [rootNote, setRootNote] = useState("C")
   const [scaleName, setScaleName] = useState("major")
   const [notesOrInterval, setNotesOrInterval] = useState(true)
+
+  const onEnterTuningText = (text) => {
+    setTuningText(processTuning(text).join(""))
+  }
+  const onChangeTuning = () => {
+    setTuning(processTuning(tuningText))
+  }
   
   const scale = useMemo(() => new Scale(rootNote, scaleName), [rootNote, scaleName])
-  const board = useMemo(() => new FretboardCtrl(13, tuning, scale.whichAccidental()), [scale])
+  const board = useMemo(() => new FretboardCtrl(13, tuning, scale.whichAccidental()), [scale, tuning])
   const colorFunc = (note) => Scale.Colormap[Note.dist(rootNote, note)]
   // if interval mode is enable, display the intervals with this function
   const displayFunc = (note) => Scale.Intervals[Note.dist(rootNote, note)]
@@ -86,6 +111,12 @@ const ScalesPage = () => {
           from beginners looking to learn the basics of the fretboard to more advanced players seeking 
           to improve their understanding of music theory and its application on the guitar.
         </Box>
+        <input type="text" 
+          onChange={(e) => onEnterTuningText(e.target.value)} 
+          onBlur={() => onChangeTuning()} 
+          onKeyUp={(e) => e.key == "Enter" && onChangeTuning(e) && e.target.blur()}
+          value={tuningText}
+          className="rounded-lg bg-gray-700 border border-gray-600 placeholder-gray-400 p-2.5 mr-4 text-white text-sm font-medium"/>
         {/* Key select */}
         <select value={scale.key} onChange={e => setRootNote(e.target.value)}
           className="bg-gray-600 border border-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-[8rem] p-2.5 mr-4 text-center outline-none">
