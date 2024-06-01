@@ -327,7 +327,7 @@ class FretboardCtrl {
    * Map fretboard notes. 
    * @param {(fret: Number, string: Number, note: String) => ()} callback callback with fretboard position `fret`, `string` and note name `note`
    * @returns {Array}
-   * @example const notes = board.map((x, y, note) => note)  // returns all notes
+   * @example const notes = board.map((fret, string, note) => note)  // returns all notes
    */
   map(callback) {
     let results = []
