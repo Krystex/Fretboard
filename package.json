@@ -1,11 +1,11 @@
 {
   "type": "module",
   "dependencies": {
-    "esbuild": "^0.21.4",
+    "esbuild": "^0.25.5",
     "esbuild-style-plugin": "^1.6.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.19.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.1",
     "tailwindcss": "^3.3.3"
   },
   "devDependencies": {
