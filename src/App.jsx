@@ -98,18 +98,15 @@ const ScalesPage = () => {
       <div className="mb-20">
         {/* Intro Card */}
         <Box>
-          Welcome to our interactive fretboard tool, designed to help you navigate and understand the guitar fretboard in a more intuitive and engaging way. 
+          You can see notes and scales highlighted on the fretboard,
+          and toggle between note names and intervals.
           <br/> <br/>
-          This interactive tool allows you to explore the fretboard in various ways, including:
+          What you can do:
           <ul className="list-disc list-inside">
-            <li>Visualizing the fretboard in different scales, with notes colored accordingly</li>
-            <li>Switching between notes and intervals to deepen your understanding of music theory</li>
-            <li>Choosing from a range of scales to practice and learn</li>
+            <li>Change the root note and scale in the input box and see the intervals on the fretboard</li>
+            <li>Choose from common scales like major, minor, pentatonic</li>
+            <li>Click on the notes in the chromatic circle to change the root note</li>
           </ul>
-          <br/>
-          Our interactive fretboard is designed to be a valuable resource for guitarists of all levels, 
-          from beginners looking to learn the basics of the fretboard to more advanced players seeking 
-          to improve their understanding of music theory and its application on the guitar.
         </Box>
         <input type="text" 
           onChange={(e) => onEnterTuningText(e.target.value)} 
@@ -173,16 +170,14 @@ const CircleOfFifthsPage = () => {
   return (
     <div className="flex justify-center flex-col m-20">
       <Box>
-        Here you can see how the circle of fifths works together with the fretboard. <br/>
-        Simply hover over the <b>fretboard</b>, the <b>circle of fifths </b> 
-        or the <b>chromatic circle</b> and you will see how that note translates to the other formats.
+        Hover over any note on the fretboard / circle of fifths / chromatic circle to see the note's position in all three views.
 
         <br/> <br />
-        In standard tuning, you will encounter the following behaviour: <br/>
-        When you stay on one string and <b>move up or down a fret</b>, you are walking up or down the chromatic circle.
-        <br />
-        When you stay on one fret and <b>move up or down a string</b>, you are walking up or down the circle of fifths,
-        because the guitar is tuned in fourths.
+        On a standard-tuned guitar: 
+        <ul className="list-disc list-inside">
+          <li>Moving along a string (left/right) follows the chromatic circle - each fret is a half step.</li>
+          <li>Moving between strings (up/down) follows the circle of fifths, since strings are tuned in fourths.</li>
+        </ul>
       </Box>
       <Fretboard width={800} board={board}
         noteFunc={(note) => Note.eq(cofNote, note)} colorFunc={colorFunc}
