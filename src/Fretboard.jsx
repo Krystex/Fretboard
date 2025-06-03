@@ -70,8 +70,8 @@ const CircleOfArcs = ({ num, ...rest }) => {
  */
 const Text = ({ x, y, children, ...rest }) => (
   <text x={x} y={y} fontFamily="-apple-system, BlinkMacSystemFont, Roboto, sans-serif"
-    alignmentBaseline="central" fontWeight="bold" fontSize={14}
-    textAnchor="middle"
+    dominantBaseline="middle" fontWeight="bold" fontSize={14}
+    textAnchor="middle" dy="0.35em"
     pointerEvents="none" {...rest}>{children}</text>
 )
 
@@ -195,8 +195,9 @@ const Fretboard = ({ width, board, noteFunc, colorFunc, displayFunc, onMouseEnte
         <text x={scx(x - 0.5)} y={scy(y)} key={`${x}-${y}`} fill="#000" fontSize="14"
           opacity={noteFunc(note) ? 1 : 0}
           fontFamily="-apple-system, BlinkMacSystemFont, Roboto, sans-serif"
-          alignmentBaseline="central"
+          dominantBaseline="middle"
           textAnchor="middle"
+          dy="0.1em"
           pointerEvents="none"
         >
           {displayFunc ? displayFunc(note) : note }
