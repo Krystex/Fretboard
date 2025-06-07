@@ -159,18 +159,29 @@ const ChromaticNoteCircle = (props) => (
  * @returns 
  */
 const Fretboard = ({ width, board, noteFunc, colorFunc, displayFunc, onMouseEnter, onMouseOut }) => {
-  // padding on left and right side: 10%
-  const paddingSide = 0.1 * width
-  const stringSpace = 30
-  const height = 20 + board.numStrings * stringSpace
+  let paddingSide, stringSpace, height, noteRadius
+  // breakpoint for responsive fretboard
+  const breakpoint = 550
+
+  if (width > breakpoint) {
+    paddingSide = 0.1 * width
+    stringSpace = 30
+    height = 20 + board.numStrings * stringSpace
+    noteRadius = 14
+  } else {
+    paddingSide = 0.0
+    stringSpace = 30 * width / breakpoint
+    height = 20 + board.numStrings * stringSpace
+    noteRadius = 14 * width / breakpoint
+  }
 
   // x scaler
-  const scx = scaleLinear([paddingSide, width - paddingSide], [0, board.numFrets])
+  const scx = scaleLinear([paddingSide, width - paddingSide], [0, board.numFrets - 1])
   // y scaler
   const scy = scaleLinear([20, height], [0, board.numStrings])
 
   return (
-    <svg width={width} height={height}>
+    <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
       { /* Horizontal Lines */}
       {range(0, board.numStrings).map(i => (
         <Line key={i} fromx={scx(0)} fromy={scy(i)} tox={scx(board.numFrets - 1)} toy={scy(i)} stroke="#aaa" strokeWidth="1.5" />
@@ -185,14 +196,14 @@ const Fretboard = ({ width, board, noteFunc, colorFunc, displayFunc, onMouseEnte
       ))}
       { /* Fretboard note circles */}
       {board.map((x, y, note) => (
-        <circle key={`${x}-${y}`} cx={scx(x - 0.5)} cy={scy(y)} r="12" stroke="#000"
+        <circle key={`${x}-${y}`} cx={scx(x - 0.5)} cy={scy(y)} r={noteRadius} stroke="#000"
           fill={colorFunc(note)} opacity={noteFunc(note) ? 1 : 0}
           onMouseEnter={() => onMouseEnter && onMouseEnter(x, y, note)}
           onMouseOut={() => onMouseOut && onMouseOut(x, y, note)}></circle>
       ))}
       { /* Fretboard note circles texts */}
       {board.map((x, y, note) => (
-        <text x={scx(x - 0.5)} y={scy(y)} key={`${x}-${y}`} fill="#000" fontSize="14"
+        <text x={scx(x - 0.5)} y={scy(y)} key={`${x}-${y}`} fill="#000" fontSize={noteRadius}
           opacity={noteFunc(note) ? 1 : 0}
           fontFamily="-apple-system, BlinkMacSystemFont, Roboto, sans-serif"
           dominantBaseline="middle"
