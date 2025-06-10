@@ -91,7 +91,6 @@ const ScalesPage = () => {
   useEffect(() => {
     const updateFretboardWidth = () => {
       const maxWidth = window.innerWidth - 64 // Account for padding
-      console.log("maxWidth", maxWidth)
       setFretboardWidth(Math.min(800, maxWidth))
     }
 
