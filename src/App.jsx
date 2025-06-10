@@ -110,17 +110,6 @@ const ScalesPage = () => {
     <div className="flex flex-col items-center mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 my-8 sm:my-12 lg:my-20">
       <div className="w-full mb-8 sm:mb-12 lg:mb-20">
         {/* Intro Card */}
-        <Box>
-          You can see notes and scales highlighted on the fretboard,
-          and toggle between note names and intervals.
-          <br/> <br/>
-          What you can do:
-          <ul className="list-disc list-inside">
-            <li>Change the root note and scale in the input box and see the intervals on the fretboard</li>
-            <li>Choose from common scales like major, minor, pentatonic</li>
-            <li>Click on the notes in the chromatic circle to change the root note</li>
-          </ul>
-        </Box>
         <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4 items-start sm:items-center">
           <input type="text" 
             onChange={(e) => onEnterTuningText(e.target.value)} 
@@ -199,19 +188,6 @@ const CircleOfFifthsPage = () => {
 
   return (
     <div className="flex flex-col items-center mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 my-8 sm:my-12 lg:my-20">
-      <div className="w-full mb-8 sm:mb-12 lg:mb-20">
-        <Box>
-          Hover over any note on the fretboard / circle of fifths / chromatic circle to see the note's position in all three views.
-
-          <br/> <br />
-          On a standard-tuned guitar: 
-          <ul className="list-disc list-inside">
-            <li>Moving along a string (left/right) follows the chromatic circle - each fret is a half step.</li>
-            <li>Moving between strings (up/down) follows the circle of fifths, since strings are tuned in fourths.</li>
-          </ul>
-        </Box>
-      </div>
-      
       <div className="w-full flex justify-center overflow-x-auto">
         <Fretboard width={fretboardWidth} board={board}
           noteFunc={(note) => Note.eq(cofNote, note)} colorFunc={colorFunc}
