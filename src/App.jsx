@@ -110,33 +110,47 @@ const ScalesPage = () => {
       <div className="w-full mb-8 sm:mb-12 lg:mb-20">
         {/* Intro Card */}
         <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4 items-start sm:items-center">
-          <input type="text" 
-            onChange={(e) => onEnterTuningText(e.target.value)} 
-            onBlur={() => onChangeTuning()} 
-            onKeyUp={(e) => e.key == "Enter" && onChangeTuning(e) && e.target.blur()}
-            value={tuningText}
-            placeholder="Tuning"
-            className="rounded-lg bg-gray-700 border border-gray-600 placeholder-gray-400 p-2.5 text-white text-sm font-medium w-full sm:w-auto"/>
+          <div className="flex flex-row sm:flex-col items-center sm:items-start gap-2 w-full sm:w-auto">
+            <span className="text-white text-sm font-medium w-[20%] sm:w-auto">Tuning</span>
+            <input type="text" 
+              onChange={(e) => onEnterTuningText(e.target.value)} 
+              onBlur={() => onChangeTuning()} 
+              onKeyUp={(e) => e.key == "Enter" && onChangeTuning(e) && e.target.blur()}
+              value={tuningText}
+              placeholder="Tuning"
+              className="rounded-lg bg-gray-700 border border-gray-600 placeholder-gray-400 p-2.5 text-white text-sm font-medium w-[80%] sm:w-auto"/>
+          </div>
           {/* Key select */}
-          <select value={scale.key} onChange={e => setRootNote(e.target.value)}
-            className="bg-gray-600 border border-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full sm:w-[8rem] p-2.5 text-center outline-none">
-            {Scale.Chromatic.map(notes =>
-              notes.map(note => 
-                <option value={note} key={note}>{note}</option>
-              )
-            )}
-          </select>
+          <div className="flex flex-row sm:flex-col items-center sm:items-start gap-2 w-full sm:w-auto">
+            <span className="text-white text-sm font-medium w-[20%] sm:w-auto">Key</span>
+            <select value={scale.key} onChange={e => setRootNote(e.target.value)}
+              className="bg-gray-600 border border-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-[80%] sm:w-[8rem] p-2.5 text-center outline-none">
+              {Scale.Chromatic.map(notes =>
+                notes.map(note => 
+                  <option value={note} key={note}>{note}</option>
+                )
+              )}
+            </select>
+          </div>
 
           {/* Scale select */}
-          <select value={scaleName} onChange={e => setScaleName(e.target.value)}
-            className="bg-gray-600 border border-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full sm:w-[8rem] p-2.5 text-center outline-none">
-            {Scale.supportedScales.map(supportedScaleName =>
-              <option key={supportedScaleName} value={supportedScaleName}>{supportedScaleName}</option>
-            )}
-          </select>
+          <div className="flex flex-row sm:flex-col items-center sm:items-start gap-2 w-full sm:w-auto">
+            <span className="text-white text-sm font-medium w-[20%] sm:w-auto">Scale</span>
+            <select value={scaleName} onChange={e => setScaleName(e.target.value)}
+              className="bg-gray-600 border border-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-[80%] sm:w-[8rem] p-2.5 text-center outline-none">
+              {Scale.supportedScales.map(supportedScaleName =>
+                <option key={supportedScaleName} value={supportedScaleName}>{supportedScaleName}</option>
+              )}
+            </select>
+          </div>
 
-          <ToggleTwoText active={notesOrInterval} onChange={() => setNotesOrInterval(!notesOrInterval)} 
-            leftText="Note" rightText="Interval" />
+          <div className="flex flex-row sm:flex-col items-center sm:items-start gap-2 w-full sm:w-auto">
+            <span className="text-white text-sm font-medium w-[20%] sm:w-auto">Display</span>
+            <div className="w-[80%] sm:w-auto">
+              <ToggleTwoText active={notesOrInterval} onChange={() => setNotesOrInterval(!notesOrInterval)} 
+                leftText="Note" rightText="Interval" />
+            </div>
+          </div>
         </div>
       </div>
 
