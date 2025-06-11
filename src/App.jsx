@@ -145,7 +145,7 @@ const ScalesPage = () => {
           </div>
 
           <div className="flex flex-row sm:flex-col items-center sm:items-start gap-2 w-full sm:w-auto">
-            <span className="text-white text-sm font-medium w-[20%] sm:w-auto">Display</span>
+            <span className="text-white text-sm font-medium w-[20%] sm:w-auto">&#10240;</span>
             <div className="w-[80%] sm:w-auto">
               <ToggleTwoText active={notesOrInterval} onChange={() => setNotesOrInterval(!notesOrInterval)} 
                 leftText="Note" rightText="Interval" />
