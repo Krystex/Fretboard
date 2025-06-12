@@ -4,6 +4,7 @@ import { createHashRouter, RouterProvider, Outlet, NavLink } from "react-router-
 import { FretboardCtrl, Note, Scale } from "./musictheory.js"
 import { Fretboard, CircleOfFifths, ChromaticNoteCircle } from "./Fretboard.jsx"
 import { Row, Box, ToggleTwoText } from "./UI.jsx"
+import githubIcon from "./github-mark-white.svg"
 
 if (!window.IS_PRODUCTION) {
   // if in development mode, wait for change message from live server
@@ -45,12 +46,15 @@ const Navbar = () => (
           <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
         </svg>
       </button>
-      <div className="pl-4 sm:pl-14">
-        <ul className="font-medium flex justify-center p-4 md:p-0 border-gray-100 rounded-lg space-x-2 sm:space-x-8 border-0 md">
+      <div className="pl-4 sm:pl-14 flex-1">
+        <ul className="font-medium flex justify-start p-4 md:p-0 border-gray-100 rounded-lg space-x-2 sm:space-x-8 border-0 md">
           <NavbarLink to="">Scales</NavbarLink>
           <NavbarLink to="circle-of-fifths">Circle of Fifths</NavbarLink>
         </ul>
       </div>
+      <a href="https://github.com/Krystex/Fretboard" target="_blank" rel="noopener noreferrer">
+        <img src={githubIcon} alt="GitHub" className="w-5 h-5 my-2 mx-4 opacity-70 hover:opacity-100 transition-opacity duration-150 ease-in-out" />
+      </a>
     </div>
   </nav>
 )

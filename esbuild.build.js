@@ -32,6 +32,9 @@ const main = async () => {
       ],
       define: {
         "window.IS_PRODUCTION": build ? "true" : "false"
+      },
+      loader: {
+        ".svg": "dataurl"
       }
     })
   if (serve) {
