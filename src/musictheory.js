@@ -1,4 +1,3 @@
-
 const basenotes = ["A", "B", "C", "D", "E", "F", "G"]
 const basenoteidx = [0, 2, 3, 5, 7, 8, 10, 12]
 const notes = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
@@ -108,28 +107,38 @@ class Note {
    * Always returns the next base key with possibly a sharp/flat.
    * If the resulting note would have double flats/sharps, an error is thrown.
    * @param {String} note Input note
-   * @param {Number} semitones Number of semitones (1 or 2)
+   * @param {Number} semitones Number of semitones to add
    * @returns {String} Resulting note
    * @example Note.addSemitonesScale("C", 2) == "D"
    * @example Note.addSemitonesScale("C", 1) == "Db"
+   * @example Note.addSemitonesScale("C", 4) == "E"
    * @example Note.addSemitonesScale("D#", 2) # --> throws Error
    */
   static addSemitonesScale(note, semitones) {
-    if (semitones > 2) {
-      throw new Error(`Doesn't support over 2 semitones right now`)
+    let currentNote = note
+    let remainingSemitones = semitones
+
+    while (remainingSemitones > 0) {
+      const nextNote = Note.nextBaseNote(currentNote)
+      const noteDistance = Note.dist(currentNote, nextNote)
+      
+      if (noteDistance <= remainingSemitones) {
+        // We can move to the next base note
+        currentNote = nextNote
+        remainingSemitones -= noteDistance
+      } else {
+        // We need to add accidentals to reach the desired semitones
+        if (remainingSemitones === 1) {
+          return nextNote + "b"
+        } else if (remainingSemitones === 2) {
+          return nextNote
+        } else {
+          throw new Error(`Cannot add ${semitones} semitones without creating double accidentals`)
+        }
+      }
     }
-    const nextNote = Note.nextBaseNote(note)
-    const noteDistance = Note.dist(note, nextNote)
-    // now flat or sharp note, depending how many semi-tones are between both notes
-    if (noteDistance == semitones) {
-      return nextNote
-    } else if (noteDistance - 1 == semitones) {
-      return nextNote + "b"
-    } else if (noteDistance + 1 == semitones) {
-      return nextNote + "#"
-    } else {
-      throw new Error(`Double sharp/flat not implemented`)
-    }
+
+    return currentNote
   }
   
   /**
@@ -176,6 +185,15 @@ class Scale {
       "major":          [2, 2, 1, 2, 2, 2, 1],
       "minor":          [2, 1, 2, 2, 1, 2, 2],
       "natural minor":  [2, 1, 2, 2, 1, 2, 2],
+      "harmonic minor":  [2, 1, 2, 2, 1, 3, 1],
+      "melodic minor":   [2, 1, 2, 2, 2, 2, 1],
+      "lydian":          [2, 2, 1, 2, 2, 1, 2],
+      "mixolydian":      [2, 2, 1, 2, 2, 2, 1],
+      "locrian":         [1, 2, 2, 1, 2, 2, 2],
+      "dorian":          [2, 1, 2, 2, 2, 1, 2],
+      "phrygian":        [1, 2, 2, 2, 1, 2, 2],
+      "minor pentatonic": [2, 3, 2, 3, 2],
+      "major pentatonic": [2, 2, 3, 2, 3],
     }[scale]
     
     try {
@@ -233,7 +251,7 @@ class Scale {
     }
   }
 
-  static supportedScales = ["major", "natural minor"]
+  static supportedScales = ["major", "natural minor", "harmonic minor", "melodic minor", "lydian", "mixolydian", "locrian", "dorian", "phrygian", "minor pentatonic", "major pentatonic"]
 
   /**
    * Notes of circle of fifths with enharmonic equivalents
