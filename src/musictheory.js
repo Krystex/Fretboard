@@ -107,38 +107,28 @@ class Note {
    * Always returns the next base key with possibly a sharp/flat.
    * If the resulting note would have double flats/sharps, an error is thrown.
    * @param {String} note Input note
-   * @param {Number} semitones Number of semitones to add
+   * @param {Number} semitones Number of semitones (1 or 2)
    * @returns {String} Resulting note
    * @example Note.addSemitonesScale("C", 2) == "D"
    * @example Note.addSemitonesScale("C", 1) == "Db"
-   * @example Note.addSemitonesScale("C", 4) == "E"
    * @example Note.addSemitonesScale("D#", 2) # --> throws Error
    */
   static addSemitonesScale(note, semitones) {
-    let currentNote = note
-    let remainingSemitones = semitones
-
-    while (remainingSemitones > 0) {
-      const nextNote = Note.nextBaseNote(currentNote)
-      const noteDistance = Note.dist(currentNote, nextNote)
-      
-      if (noteDistance <= remainingSemitones) {
-        // We can move to the next base note
-        currentNote = nextNote
-        remainingSemitones -= noteDistance
-      } else {
-        // We need to add accidentals to reach the desired semitones
-        if (remainingSemitones === 1) {
-          return nextNote + "b"
-        } else if (remainingSemitones === 2) {
-          return nextNote
-        } else {
-          throw new Error(`Cannot add ${semitones} semitones without creating double accidentals`)
-        }
-      }
+    if (semitones > 2) {
+      throw new Error(`Doesn't support over 2 semitones right now`)
     }
-
-    return currentNote
+    const nextNote = Note.nextBaseNote(note)
+    const noteDistance = Note.dist(note, nextNote)
+    // now flat or sharp note, depending how many semi-tones are between both notes
+    if (noteDistance == semitones) {
+      return nextNote
+    } else if (noteDistance - 1 == semitones) {
+      return nextNote + "b"
+    } else if (noteDistance + 1 == semitones) {
+      return nextNote + "#"
+    } else {
+      throw new Error(`Double sharp/flat not implemented`)
+    }
   }
   
   /**
@@ -178,6 +168,13 @@ class Scale {
     this.numFlats = 0
     this.numSharps = 0
 
+    let removeNotesIndices = []
+    if (scale == "minor pentatonic") {
+      removeNotesIndices = [1, 5]
+    } else if (scale == "major pentatonic") {
+      removeNotesIndices = [2, 6]
+    }
+
     if (!Scale.supportedScales.includes(scale)) {
       throw `Scale ${scale} not yet implemented`
     }
@@ -192,39 +189,37 @@ class Scale {
       "locrian":         [1, 2, 2, 1, 2, 2, 2],
       "dorian":          [2, 1, 2, 2, 2, 1, 2],
       "phrygian":        [1, 2, 2, 2, 1, 2, 2],
-      "minor pentatonic": [2, 3, 2, 3, 2],
-      "major pentatonic": [2, 2, 3, 2, 3],
+      "minor pentatonic": [2, 1, 2, 2, 1, 2, 2], // natural minor, then remove 2nd and 6th note
+      "major pentatonic": [2, 2, 1, 2, 2, 2, 1], // major, then remove 2nd and 6th note
     }[scale]
     
     try {
-      const {numSharps, numFlats, notes} = Scale.construct_scale(this.key, intervals)
-      this.numSharps = numSharps; this.numFlats = numFlats; this.notes = notes
+      this.notes = Scale.construct_scale(this.key, intervals)
     } catch (error) {
       this.key = Note.enharmonic(this.key)
-      const {numSharps, numFlats, notes} = Scale.construct_scale(this.key, intervals)
-      this.numSharps = numSharps; this.numFlats = numFlats; this.notes = notes
+      this.notes = Scale.construct_scale(this.key, intervals)
     }
+    // remove notes that are not in the scale (pentatonic scales)
+    if (removeNotesIndices.length > 0) {
+      this.notes = this.notes.filter((_, index) => !removeNotesIndices.includes(index))
+    }
+    // last note is the same as the first note, so we don't count it
+    this.numFlats = this.notes.slice(0, -1).filter(note => Note.isFlat(note)).length
+    this.numSharps = this.notes.slice(0, -1).filter(note => Note.isSharp(note)).length
   }
   /**
    * 
    */
   static construct_scale(key, intervals) {
     let notes = [key]  // scale starts with key note
-    let numSharps = 0
-    let numFlats = 0
     for (const interval of intervals) {
       // we get next note and then sharp or flat the note. this ensures that every note only appears once in the scale
       // get last constructed note
       const lastNote = notes[notes.length - 1]
       const nextNote = Note.addSemitonesScale(lastNote, interval)
-      if (Note.isSharp(nextNote)) {
-        numSharps += 1
-      } else if (Note.isFlat(nextNote)) {
-        numFlats += 1
-      }
       notes.push(nextNote)
     }
-    return {numSharps, numFlats, notes}
+    return notes
   }
 
   /** Returns if given note is in scale or not

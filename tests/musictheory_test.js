@@ -42,5 +42,10 @@ suite("scale", () => {
     assert.that(scale.notes).isEqualTo(["Db", "Eb", "F", "Gb", "Ab", "Bb", "C", "Db"])
     assert.that([scale.numFlats, scale.numSharps]).isEqualTo([5, 0])
     assert.that(scale.whichAccidental() == "b")
+
+    scale = new Scale("E", "minor pentatonic")
+    assert.that(scale.notes).isEqualTo(["E", "G", "A", "B", "D", "E"])
+    assert.that([scale.numFlats, scale.numSharps]).isEqualTo([0, 0])
+    assert.that(scale.whichAccidental() == "")
   })
 })
