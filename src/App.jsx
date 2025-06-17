@@ -122,7 +122,7 @@ const ScalesPage = () => {
               onKeyUp={(e) => e.key == "Enter" && onChangeTuning(e) && e.target.blur()}
               value={tuningText}
               placeholder="Tuning"
-              className="rounded-lg bg-gray-700 border border-gray-600 placeholder-gray-400 p-2.5 text-white text-sm font-medium w-[80%] sm:w-auto"/>
+              className="rounded-lg bg-gray-700 border border-gray-600 placeholder-gray-400 p-2.5 text-white text-sm font-medium w-[80%] sm:w-auto focus:border-blue-500 focus:ring-blue-500 focus:outline-none"/>
           </div>
           {/* Key select */}
           <div className="flex flex-row sm:flex-col items-center sm:items-start gap-2 w-full sm:w-auto">
